@@ -1,7 +1,8 @@
-package com.catalyst.catalyst;
+package com.catalyst.catalyst.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,10 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.catalyst.catalyst.R;
+
 /**
  * Created by nickpiscopio on 5/8/15.
  */
-public class DemoSliderFragment extends Fragment
+public class DemoPagerFragment extends Fragment
 {
     public static String DEMO_PAGE = "demo_page";
 
@@ -28,28 +31,19 @@ public class DemoSliderFragment extends Fragment
         switch (page)
         {
             case INSPIRATION_PAGE:
-                pageId = R.layout.fragment_demo_2;
+                pageId = R.layout.fragment_demo_inspire;
                 break;
 
             case SHARE_PAGE:
-                pageId = R.layout.fragment_demo_3;
+                pageId = R.layout.fragment_demo_share;
                 break;
 
             case DESCRIPTION_PAGE:
             default:
-                pageId = R.layout.fragment_demo_1;
+                pageId = R.layout.fragment_demo_about;
                 break;
         }
 
         return inflater.inflate(pageId, container, false);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.add(0, R.menu.menu_main, 0,
-                 getResources().getString(R.string.app_name))
-            .setIcon(R.drawable.abc_ab_share_pack_mtrl_alpha)
-            .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 }

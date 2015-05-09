@@ -2,17 +2,41 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <!-- activity_screen_slide.xml -->
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-    <TextView
-        android:text="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/margins">
+
+        <ImageView
+            android:id="@+id/pager_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pager_margin"
+            android:src="@mipmap/pager_selected"/>
+
+        <ImageView
+            android:id="@+id/pager_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pager_margin"
+            android:src="@mipmap/pager_unselected"/>
+
+        <ImageView
+            android:id="@+id/pager_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pager_margin"
+            android:src="@mipmap/pager_unselected"/>
+    </LinearLayout>
 
 </LinearLayout>

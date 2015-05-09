@@ -1,37 +1,36 @@
-package com.catalyst.catalyst;
+package com.catalyst.catalyst.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.catalyst.catalyst.R;
 
 
 public class MainActivity extends AppCompatActivity
 {
     public static String SHOW_DEMO = "show_demo";
 
-    @Override protected void onCreate(Bundle savedInstanceState)
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null)
+        if (bundle != null)
         {
             boolean showDemo = bundle.getBoolean(SHOW_DEMO);
 
-            Log.i("Bundle", "Not Null");
-
-            if(showDemo)
+            if (showDemo)
             {
                 showDemo();
             }
         }
         else
         {
-            Log.i("Bundle", "Null");
             showDemo();
         }
 
@@ -45,14 +44,16 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
     {
         Intent intent = null;
 
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        if(intent != null)
+        if (intent != null)
         {
             startActivity(intent);
         }

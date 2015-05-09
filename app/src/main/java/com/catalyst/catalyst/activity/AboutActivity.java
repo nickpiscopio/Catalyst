@@ -1,10 +1,12 @@
-package com.catalyst.catalyst;
+package com.catalyst.catalyst.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.catalyst.catalyst.R;
 
 
 public class AboutActivity extends AppCompatActivity

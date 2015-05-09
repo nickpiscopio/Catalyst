@@ -1,4 +1,4 @@
-package com.catalyst.catalyst;
+package com.catalyst.catalyst.adapter;
 
 /**
  * Created by nickpiscopio on 5/8/15.
@@ -9,37 +9,33 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.catalyst.catalyst.fragment.DemoPagerFragment;
+
 /**
  * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
  * sequence.
  */
-public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter
+public class PagerAdapter extends FragmentStatePagerAdapter
 {
-    /**
-     * The number of pages (wizard steps) to show in this demo.
-     */
     private static final int NUM_PAGES = 3;
 
-    public ScreenSlidePagerAdapter(FragmentManager fm)
+    public PagerAdapter(FragmentManager fm)
     {
         super(fm);
     }
 
-    @Override
-    public Fragment getItem(int position)
+    @Override public Fragment getItem(int position)
     {
-        DemoSliderFragment demoSliderFragment = new DemoSliderFragment();
-
         Bundle bundle = new Bundle();
-        bundle.putInt(DemoSliderFragment.DEMO_PAGE, position);
+        bundle.putInt(DemoPagerFragment.DEMO_PAGE, position);
 
+        DemoPagerFragment demoSliderFragment = new DemoPagerFragment();
         demoSliderFragment.setArguments(bundle);
 
         return demoSliderFragment;
     }
 
-    @Override
-    public int getCount()
+    @Override public int getCount()
     {
         return NUM_PAGES;
     }
