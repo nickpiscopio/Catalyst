@@ -1,6 +1,8 @@
 package com.catalyst.catalyst.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,7 +13,7 @@ import com.catalyst.catalyst.R;
 
 public class MainActivity extends AppCompatActivity
 {
-    public static String SHOW_DEMO = "show_demo";
+    public static String DEMO_FINISHED = "com.catalyst.catalyst.demo.finished";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -19,21 +21,14 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null)
-        {
-            boolean showDemo = bundle.getBoolean(SHOW_DEMO);
+        SharedPreferences prefs = this.getSharedPreferences(DEMO_FINISHED, Context.MODE_PRIVATE);
 
-            if (showDemo)
-            {
-                showDemo();
-            }
-        }
-        else
+        boolean isDemoFinished = prefs.getBoolean(DEMO_FINISHED, false);
+
+        if (!isDemoFinished)
         {
             showDemo();
         }
-
     }
 
     private void showDemo()

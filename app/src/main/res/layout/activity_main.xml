@@ -7,13 +7,13 @@
     android:gravity="center_vertical">
 
     <TextView
-        style="@style/text_bold"
+        style="@style/text"
         android:id="@+id/text_inspiration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginTop="@dimen/about_description_margin"
-        android:text="Today is your day; conquer it!"
+        android:text="@string/positivity_conquer"
         android:textSize="@dimen/title"/>
 
     <TextView

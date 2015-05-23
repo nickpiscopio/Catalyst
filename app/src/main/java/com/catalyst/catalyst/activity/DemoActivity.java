@@ -1,6 +1,8 @@
 package com.catalyst.catalyst.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -81,9 +83,13 @@ public class DemoActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_skip)
         {
+            SharedPreferences prefs = this.getSharedPreferences(MainActivity.DEMO_FINISHED, Context.MODE_PRIVATE);
+
+            prefs.edit().putBoolean(MainActivity.DEMO_FINISHED, true).commit();
+
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(MainActivity.SHOW_DEMO, false);
+
             startActivity(intent);
 
             return true;

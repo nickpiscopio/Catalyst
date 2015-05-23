@@ -23,4 +23,7 @@
     <string name="setting_inspire_weekly">Weekly</string>
     <string name="setting_inspire_never">Never</string>
 
+    <!-- Inspirations -->
+    <string name="positivity_conquer"><b>Today</b> is your day; <b>conquer</b> it!</string>
+
 </resources>
