@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/margins"
+    android:background="@android:color/white"
     android:gravity="center_vertical">
 
     <TextView
@@ -17,9 +18,11 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/demo_image_height"
-        android:layout_marginBottom="@dimen/about_description_margin"
-        android:src="@null"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/demo_image_logo_margin"
+        android:layout_marginBottom="@dimen/demo_image_logo_margin"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/demo_logo"/>
 
     <TextView
         style="@style/text"

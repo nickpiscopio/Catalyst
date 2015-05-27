@@ -6,6 +6,7 @@
     <dimen name="text_normal">20sp</dimen>
     <dimen name="text_small">14sp</dimen>
 
+    <dimen name="demo_image_logo_margin">25dp</dimen>
     <dimen name="demo_image_margin">15dp</dimen>
     <dimen name="about_description_margin">5dp</dimen>
     <dimen name="pager_margin">5dp</dimen>

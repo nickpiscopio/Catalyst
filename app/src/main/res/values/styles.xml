@@ -7,7 +7,7 @@
     </style>
 
     <style name="text">
-        <!--<item name="android:textColor">@color/primary</item>-->
+        <item name="android:textColor">@color/dark_blue</item>
     </style>
 
     <style name="text_bold" parent="text">
