@@ -1,14 +1,10 @@
 package com.catalyst.catalyst.activity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.MultiSelectListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
-import com.catalyst.catalyst.R;
+import com.catalyst.catalyst.fragment.SettingsFragment;
 
 
 public class SettingsActivity extends AppCompatActivity
@@ -23,65 +19,16 @@ public class SettingsActivity extends AppCompatActivity
                                                         new SettingsFragment()).commit();
     }
 
-    public static class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
     {
-        private Context context;
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            addPreferencesFromResource(R.xml.prefs);
-
-            context = getActivity().getApplicationContext();
-
-//            SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
-//            MultiSelectListPreference intervalPreference = (MultiSelectListPreference) findPreference(context.getResources().getString(R.string.preference_interval));
-//            intervalPreference.setSummary(
-//                    sp.getString(context.getResources().getString(R.string.preference_interval),
-//                                 ""));
-
-            populateSummary(context.getResources().getString(R.string.preference_interval));
-        }
-
-        public void onResume()
+        switch (item.getItemId())
         {
-            super.onResume();
-            getPreferenceScreen().getSharedPreferences()
-                                 .registerOnSharedPreferenceChangeListener(this);
-        }
-
-        public void onPause()
-        {
-            super.onPause();
-            getPreferenceScreen().getSharedPreferences()
-                                 .unregisterOnSharedPreferenceChangeListener(this);
-        }
-
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                                              String key)
-        {
-            populateSummary(context.getResources().getString(R.string.preference_interval));
-        }
-
-        private void populateSummary(String key)
-        {
-            Preference pref = findPreference(key);
-            if (pref instanceof MultiSelectListPreference) {
-                MultiSelectListPreference etp = (MultiSelectListPreference) pref;
-
-                String valueString = "";
-
-                String[] values = etp.getValues().toArray(new String[etp.getValues().size()]);
-
-                int length = values.length;
-
-                for (int i = 0; i < values.length; i++)
-                {
-                    valueString += (i != length - 1) ? values[i] + ", " : values[i];
-                }
-
-                pref.setSummary(valueString);
-            }
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
