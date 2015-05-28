@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:title="@string/settings_title">
+
+        <CheckBoxPreference
+            android:key="@string/preference_notification"
+            android:title="@string/settings_notification_title"
+            android:summary="@string/settings_notification_summary" />
+
+        <MultiSelectListPreference
+            android:key="@string/preference_interval"
+            android:dependency="@string/preference_notification"
+            android:title="@string/settings_interval_title"
+            android:entries="@array/interval"
+            android:entryValues="@array/interval"
+            android:dialogTitle="@string/settings_interval_title" />
+
+        <com.catalyst.catalyst.preference.TimePreference
+            android:key="@string/preference_time"
+            android:dependency="@string/preference_notification"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/settings_time_title"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>         

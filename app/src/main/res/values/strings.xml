@@ -16,12 +16,30 @@
     <string name="description_daily_inspiration">Get inspired daily, weekly, or whenever you may need it!</string>
     <string name="description_share">Share the inspiration with friends and family!</string>
 
-    <string name="setting_inspire_day">Inspire me</string>
-    <string name="setting_inspire_time">Inspire me at</string>
+    <!-- Settings -->
+    <string name="settings_title">Inspiration Settings</string>
+    <string name="settings_notification_title">Notifications</string>
+    <string name="settings_notification_summary">Notify me of new inspirations</string>
 
-    <string name="setting_inspire_daily">Daily</string>
-    <string name="setting_inspire_weekly">Weekly</string>
-    <string name="setting_inspire_never">Never</string>
+    <string name="settings_interval_title">Interval</string>
+
+    <string name="settings_time_title">Time</string>
+
+    <string name="setting_inspire_sunday">Sunday</string>
+    <string name="setting_inspire_monday">Monday</string>
+    <string name="setting_inspire_tuesday">Tuesday</string>
+    <string name="setting_inspire_wednesday">Wednesday</string>
+    <string name="setting_inspire_thursday">Thursday</string>
+    <string name="setting_inspire_friday">Friday</string>
+    <string name="setting_inspire_saturday">Saturday</string>
+
+    <string name="positive_set">Set</string>
+
+    <!-- Preference Keys -->
+    <string name="preference_notification">preference_notification</string>
+    <string name="preference_interval">preference_interval</string>
+    <string name="preference_time">preference_time</string>
+
 
     <!-- Inspirations -->
     <string name="positivity_conquer"><b>Today</b> is your day; <b>conquer</b> it!</string>

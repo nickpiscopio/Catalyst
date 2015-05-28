@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="interval">
+        <item>@string/setting_inspire_sunday</item>
+        <item>@string/setting_inspire_monday</item>
+        <item>@string/setting_inspire_tuesday</item>
+        <item>@string/setting_inspire_wednesday</item>
+        <item>@string/setting_inspire_thursday</item>
+        <item>@string/setting_inspire_friday</item>
+        <item>@string/setting_inspire_saturday</item>
+    </string-array>
+
+</resources>
