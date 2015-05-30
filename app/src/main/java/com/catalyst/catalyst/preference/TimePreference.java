@@ -15,7 +15,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Created by nickpiscopio on 5/28/15.
+ * Time preference node for the preference screen.
+ *
+ * Created by Nick Piscopio on 5/28/15.
  */
 public class TimePreference extends DialogPreference
 {

@@ -6,7 +6,11 @@ import android.view.MenuItem;
 
 import com.catalyst.catalyst.fragment.SettingsFragment;
 
-
+/**
+ * Settings screen for Catalyst.
+ *
+ * Created by Nick Piscopio on 5/8/15.
+ */
 public class SettingsActivity extends AppCompatActivity
 {
     @Override protected void onCreate(Bundle savedInstanceState)

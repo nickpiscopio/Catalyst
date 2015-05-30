@@ -3,7 +3,9 @@ package com.catalyst.catalyst.helper;
 import android.provider.BaseColumns;
 
 /**
- * Created by nickpiscopio on 5/24/15.
+ * Inspiration table in the database.
+ *
+ * Created by Nick Piscopio on 5/24/15.
  */
 public class InspirationTable implements BaseColumns
 {

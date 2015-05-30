@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import com.catalyst.catalyst.R;
 
 /**
- * Created by nickpiscopio on 5/8/15.
+ * Settings fragment to show the preferences.
+ *
+ * Created by Nick Piscopio on 5/8/15.
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
 {
@@ -50,6 +52,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         populateSummary(context.getResources().getString(R.string.preference_interval));
     }
 
+    /**
+     * Populates the summary of of a specific node.
+     *
+     * @param key   The key of the preference to populate.
+     */
     private void populateSummary(String key)
     {
         Preference pref = findPreference(key);

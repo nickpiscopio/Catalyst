@@ -3,14 +3,15 @@ package com.catalyst.catalyst.helper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.catalyst.catalyst.Model.Table;
+import com.catalyst.catalyst.Model.Record;
 
 import java.util.ArrayList;
 
 /**
- * Created by nickpiscopio on 5/24/15.
+ * Database helper file.
+ *
+ * Created by Nick Piscopio on 5/24/15.
  */
 public class DbHelper extends SQLiteOpenHelper
 {
@@ -32,13 +33,9 @@ public class DbHelper extends SQLiteOpenHelper
             InspirationTable.COLUMN_NAME_AUTHOR + TEXT_TYPE + NOT_NULL + COMMA_SEP +
             InspirationTable.COLUMN_NAME_CATEGORY + TEXT_TYPE + NOT_NULL + COMMA_SEP +
             InspirationTable.COLUMN_NAME_DATE_TO_DISPLAY + TEXT_TYPE +
-            " ); " +
-            "CREATE TABLE IF NOT EXISTS " + AppTable.TABLE_NAME + " (" +
-            AppTable.COLUMN_NAME_VERSION + INTEGER_TYPE + " PRIMARY KEY" + NOT_NULL +
-            " ); ";
+            " );";
 
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + InspirationTable.TABLE_NAME + "; " +
-                                                     "DROP TABLE IF EXISTS " + AppTable.TABLE_NAME;
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + InspirationTable.TABLE_NAME + ";";
 
     public DbHelper(Context context)
     {
@@ -47,7 +44,6 @@ public class DbHelper extends SQLiteOpenHelper
 
     public void onCreate(SQLiteDatabase db)
     {
-        Log.i("CreateDatabase", SQL_CREATE_ENTRIES);
         db.execSQL(SQL_CREATE_ENTRIES);
     }
 
@@ -57,20 +53,36 @@ public class DbHelper extends SQLiteOpenHelper
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }
+
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void insert(SQLiteDatabase db, ArrayList<Table> list)
+    /**
+     * Edits the contents of the database.
+     *
+     * @param db    The database to edit.
+     * @param list  The list of parameters to either insert or update.
+     */
+    public void editDb(SQLiteDatabase db, ArrayList<Record> list)
     {
         try
         {
             db.beginTransaction();
 
-            for (Table table : list)
+            for (Record table : list)
             {
-                db.insert(table.getTableName(), null, table.getContentValues());
+                if (table.getWhereClause() != null && table.getWhereClause().length() > 0)
+                {
+                    db.update(table.getTableName(), table.getContentValues(),
+                              table.getWhereClause(), null);
+                }
+                else
+                {
+                    db.insert(table.getTableName(), null, table.getContentValues());
+                }
+
             }
 
             db.setTransactionSuccessful();

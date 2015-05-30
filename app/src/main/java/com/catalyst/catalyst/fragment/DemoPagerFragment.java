@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import com.catalyst.catalyst.R;
 
 /**
- * Created by nickpiscopio on 5/8/15.
+ * Fragment class for the demo.
+ *
+ * Created by Nick Piscopio on 5/8/15.
  */
 public class DemoPagerFragment extends Fragment
 {

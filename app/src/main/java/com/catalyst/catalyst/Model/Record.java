@@ -3,15 +3,17 @@ package com.catalyst.catalyst.Model;
 import android.content.ContentValues;
 
 /**
- * Created by nickpiscopio on 5/24/15.
+ * Model for inserting a record into the database.
+ *
+ * Created by Nick Piscopio on 5/24/15.
  */
-public class Table
+public class Record
 {
     private String tableName;
-
+    private String whereClause;
     private ContentValues contentValues;
 
-    public Table(String tableName, ContentValues contentValues)
+    public Record(String tableName, ContentValues contentValues)
     {
         this.tableName = tableName;
         this.contentValues = contentValues;
@@ -20,6 +22,16 @@ public class Table
     public String getTableName()
     {
         return tableName;
+    }
+
+    public void setWhereClause(String whereClause)
+    {
+        this.whereClause = whereClause;
+    }
+
+    public String getWhereClause()
+    {
+        return whereClause;
     }
 
     public ContentValues getContentValues()

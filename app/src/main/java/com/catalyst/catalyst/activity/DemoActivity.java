@@ -15,6 +15,8 @@ import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.adapter.PagerAdapter;
 
 /**
+ * Screens to demo the application before the user commits to Catalyst.
+ *
  * Created by nickpiscopio on 5/8/15.
  */
 public class DemoActivity extends AppCompatActivity
@@ -86,7 +88,7 @@ public class DemoActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_skip)
         {
-            SharedPreferences prefs = this.getSharedPreferences(MainActivity.DEMO_FINISHED, Context.MODE_PRIVATE);
+            SharedPreferences prefs = this.getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
             prefs.edit().putBoolean(MainActivity.DEMO_FINISHED, true).commit();
 

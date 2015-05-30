@@ -1,9 +1,5 @@
 package com.catalyst.catalyst.adapter;
 
-/**
- * Created by nickpiscopio on 5/8/15.
- */
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,8 +8,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.catalyst.catalyst.fragment.DemoPagerFragment;
 
 /**
- * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
- * sequence.
+ * A simple pager adapter that represents pages for the demo.
+ *
+ * Created by Nick Piscopio on 5/8/15.
  */
 public class PagerAdapter extends FragmentStatePagerAdapter
 {
