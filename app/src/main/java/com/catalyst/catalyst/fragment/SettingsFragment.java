@@ -6,12 +6,11 @@ import android.os.Bundle;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.catalyst.catalyst.R;
+import com.catalyst.catalyst.preference.DayOfWeek;
+
+import java.util.Arrays;
 
 /**
  * Settings fragment to show the preferences.
@@ -65,13 +64,26 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
             String valueString = "";
 
+            int[] weekDayValues = new int[etp.getValues().size()];
+
             String[] values = etp.getValues().toArray(new String[etp.getValues().size()]);
 
-            int length = values.length;
+            int prefLength = values.length;
 
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < prefLength; i++)
             {
-                valueString += (i != length - 1) ? values[i] + ", " : values[i];
+                weekDayValues[i] = new DayOfWeek(context, values[i]).getWeekDayValue();
+            }
+
+            Arrays.sort(weekDayValues);
+
+            int weekDayLength = weekDayValues.length;
+
+            for (int i = 0; i < weekDayLength; i++)
+            {
+                String day = new DayOfWeek(context, weekDayValues[i]).getWeekDayString();
+
+                valueString += (i != weekDayLength - 1) ? day + ", " : day;
             }
 
             pref.setSummary(valueString);

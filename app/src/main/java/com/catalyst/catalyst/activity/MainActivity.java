@@ -11,8 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.catalyst.catalyst.Model.Record;
+import com.catalyst.catalyst.model.Record;
 import com.catalyst.catalyst.R;
+import com.catalyst.catalyst.alarm.CatalystAlarm;
 import com.catalyst.catalyst.helper.DbHelper;
 import com.catalyst.catalyst.helper.InspirationTable;
 
@@ -32,13 +33,15 @@ import java.util.HashMap;
  */
 public class MainActivity extends AppCompatActivity
 {
-    public static String SHARED_PREFERENCES = "catalyst.shared.preferences";
+    public static String SHARED_PREFERENCES = "com.catalyst.catalyst.shared.preferences";
     public static String DEMO_FINISHED = "com.catalyst.catalyst.demo.finished";
     public static String JSON_VERSION = "com.catalyst.catalyst.json.version";
 
     private static String JSON_FILE = "catalyst.json";
 
     private SharedPreferences prefs;
+
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -76,7 +79,9 @@ public class MainActivity extends AppCompatActivity
      */
     private void runCatalyst()
     {
-        //move to async task
+        context = getApplicationContext();
+
+        // Move to async task - Start
         try
         {
             String jsonVersionString = "version";
@@ -97,6 +102,11 @@ public class MainActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
+
+        // Move to async task - End
+
+        // Run after async task completes successfully.
+        CatalystAlarm.getInstance(context);
     }
 
     /**
@@ -138,7 +148,7 @@ public class MainActivity extends AppCompatActivity
             inspirationArrayList.put(inspirationId, new Record(InspirationTable.TABLE_NAME, values));
         }
 
-        DbHelper dbHelper = new DbHelper(getApplicationContext());
+        DbHelper dbHelper = new DbHelper(context);
 
         SQLiteDatabase database = dbHelper.getReadableDatabase();
         //get id where id = all ids from inspirationIds

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.catalyst.catalyst.Model.Record;
+import com.catalyst.catalyst.model.Record;
 
 import java.util.ArrayList;
 
