@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.catalyst.catalyst.model.Record;
+import com.catalyst.catalyst.Model.Record;
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.alarm.CatalystAlarm;
 import com.catalyst.catalyst.helper.DbHelper;
