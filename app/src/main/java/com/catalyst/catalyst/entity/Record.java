@@ -1,4 +1,4 @@
-package com.catalyst.catalyst.Model;
+package com.catalyst.catalyst.entity;
 
 import android.content.ContentValues;
 
