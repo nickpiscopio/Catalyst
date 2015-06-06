@@ -29,8 +29,8 @@ public class CatalystNotification extends BroadcastReceiver
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         Intent mainActivityIntent = new Intent(context, MainActivity.class);
-        mainActivityIntent.addFlags(
-                Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        mainActivityIntent.putExtra(MainActivity.NEW_INSPIRATION, true);
+        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, mainActivityIntent,
                                                           PendingIntent.FLAG_ONE_SHOT);

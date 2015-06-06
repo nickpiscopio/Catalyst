@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.catalyst.catalyst.entity.Record;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Database helper file.
@@ -24,6 +25,8 @@ public class DbHelper extends SQLiteOpenHelper
     private static final String NOT_NULL = " NOT NULL";
     private static final String COMMA_SEP = ",";
 
+    private static final long ELIGIBLE_INSPIRATION_DATE =  Calendar.getInstance().getTimeInMillis() - 604800000;
+
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE IF NOT EXISTS " + InspirationTable.TABLE_NAME + " (" +
             InspirationTable.COLUMN_NAME_ID + TEXT_TYPE + " PRIMARY KEY" + NOT_NULL + COMMA_SEP +
@@ -36,6 +39,14 @@ public class DbHelper extends SQLiteOpenHelper
             " );";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + InspirationTable.TABLE_NAME + ";";
+
+    public static final String GET_INSPIRATION = "SELECT " +
+                                                 InspirationTable.COLUMN_NAME_ID + COMMA_SEP +
+                                                 InspirationTable.COLUMN_NAME_AUTHOR +
+                                                 " FROM " + InspirationTable.TABLE_NAME +
+                                                 " WHERE " + InspirationTable.COLUMN_NAME_HIDDEN + " = 0 AND " +
+                                                 InspirationTable.COLUMN_NAME_DATE_DISPLAYED + " < " +
+                                                 String.valueOf(ELIGIBLE_INSPIRATION_DATE) + " ORDER BY RANDOM() LIMIT 1";
 
     public DbHelper(Context context)
     {
