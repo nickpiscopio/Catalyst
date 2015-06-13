@@ -3,6 +3,7 @@
           package="com.catalyst.catalyst" >
 
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -29,6 +30,13 @@
             android:label="@string/action_settings" />
 
         <receiver android:name=".alarm.CatalystNotification" />
+
+        <receiver android:name=".receiver.BootReceiver"
+                  android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
 
     </application>
 

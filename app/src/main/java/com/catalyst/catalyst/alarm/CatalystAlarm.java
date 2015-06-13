@@ -4,7 +4,17 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.catalyst.catalyst.R;
+import com.catalyst.catalyst.util.CatalystDate;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Singleton class for the alarm in Catalyst.
@@ -26,6 +36,8 @@ public class CatalystAlarm
             catalystAlarm = new CatalystAlarm(context);
         }
 
+        catalystAlarm.setAlarm();
+
         return catalystAlarm;
     }
 
@@ -34,8 +46,6 @@ public class CatalystAlarm
         this.context = context;
 
         alarmManager = (AlarmManager) this.context.getSystemService(Context.ALARM_SERVICE);
-
-        setAlarm();
     }
 
     /**
@@ -45,9 +55,28 @@ public class CatalystAlarm
     {
         Intent intent = new Intent(context, CatalystNotification.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
-                                                                 intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        long currentTime = System.currentTimeMillis() + (20 * 1000);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime, pendingIntent);
-        Log.i("Alarm", "Alarm set for: " + currentTime);
+                                                                 intent,
+                                                                 PendingIntent.FLAG_CANCEL_CURRENT);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        Resources res = context.getResources();
+
+        //If the user has the notification preference on.
+        if (prefs.getBoolean(res.getString(R.string.preference_notification),
+                             Boolean.valueOf(res.getString(R.string.default_notification_flag))))
+        {
+            Set<String> interval = prefs.getStringSet(res.getString(R.string.preference_interval),
+                                                      new HashSet<>(Arrays.asList(res.getStringArray(R.array.interval))));
+
+            //This time is set from today in milliseconds.
+            long time = prefs.getLong(res.getString(R.string.preference_time),
+                                      Long.valueOf(res.getString(R.string.default_interval_time)));
+
+            long alarmTime = new CatalystDate(context).getNextAlarm(interval, time);
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+            Log.i("Alarm", "Alarm set for: " + alarmTime);
+        }
     }
 }

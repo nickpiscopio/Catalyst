@@ -7,6 +7,6 @@ package com.catalyst.catalyst.util;
  */
 public class Constant
 {
-    public static String SHARED_PREFERENCES = "com.catalyst.catalyst.shared.preferences";
-    public static String DEMO_FINISHED = "com.catalyst.catalyst.demo.finished";
+    public static final String SHARED_PREFERENCES = "com.catalyst.catalyst.shared.preferences";
+    public static final String DEMO_FINISHED = "com.catalyst.catalyst.demo.finished";
 }

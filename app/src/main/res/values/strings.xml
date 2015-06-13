@@ -35,6 +35,9 @@
 
     <string name="positive_set">Set</string>
 
+    <string name="default_notification_flag">true</string>
+    <string name="default_interval_time">54000000</string>
+
     <!-- Preference Keys -->
     <string name="preference_notification">preference_notification</string>
     <string name="preference_interval">preference_interval</string>

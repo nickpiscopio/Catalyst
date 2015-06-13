@@ -46,5 +46,8 @@ public class CatalystNotification extends BroadcastReceiver
         notification.defaults = Notification.DEFAULT_ALL;
 
         notificationManager.notify(NOTIFICATION_ID, notification);
+
+        // Creates the alarm to start sending notifications to the user.
+        CatalystAlarm.getInstance(context);
     }
 }

@@ -68,8 +68,10 @@ public class DayOfWeek
          * Map of enumerations with corresponding integer values.
          */
         private static final Map<Integer, WeekDay> intToTypeMap = new HashMap<>();
-        static {
-            for (WeekDay type : WeekDay.values()) {
+        static
+        {
+            for (WeekDay type : WeekDay.values())
+            {
                 intToTypeMap.put(type.value, type);
             }
         }
@@ -81,10 +83,15 @@ public class DayOfWeek
          *
          * @return  The WeekDay.
          */
-        public static WeekDay fromInt(int i) {
+        public static WeekDay fromInt(int i)
+        {
             WeekDay type = intToTypeMap.get(Integer.valueOf(i));
+
             if (type == null)
+            {
                 return null;
+            }
+
             return type;
         }
 

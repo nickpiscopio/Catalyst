@@ -24,8 +24,8 @@ import com.catalyst.catalyst.util.Constant;
 public class MainActivity extends AppCompatActivity implements TaskListener
 {
     public static final String NEW_INSPIRATION = "new.inspiration";
-    private static String INSPIRATION_ID = "com.catalyst.catalyst.inspiration.id";
-    private static String INSPIRATION_AUTHOR = "com.catalyst.catalyst.inspiration.author";
+    private static final String INSPIRATION_ID = "com.catalyst.catalyst.inspiration.id";
+    private static final String INSPIRATION_AUTHOR = "com.catalyst.catalyst.inspiration.author";
 
     private SharedPreferences prefs;
 
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(MainActivity.INSPIRATION_ID, result[0]);
                 editor.putString(MainActivity.INSPIRATION_AUTHOR, result[1]);
-                editor.commit();
+                editor.apply();
             }
         }
 

@@ -8,9 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.catalyst.catalyst.R;
-import com.catalyst.catalyst.preference.DayOfWeek;
-
-import java.util.Arrays;
+import com.catalyst.catalyst.util.CatalystDate;
 
 /**
  * Settings fragment to show the preferences.
@@ -59,34 +57,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void populateSummary(String key)
     {
         Preference pref = findPreference(key);
-        if (pref instanceof MultiSelectListPreference) {
-            MultiSelectListPreference etp = (MultiSelectListPreference) pref;
 
-            String valueString = "";
+        if (pref instanceof MultiSelectListPreference)
+        {
+            MultiSelectListPreference interval = (MultiSelectListPreference) pref;
 
-            int[] weekDayValues = new int[etp.getValues().size()];
-
-            String[] values = etp.getValues().toArray(new String[etp.getValues().size()]);
-
-            int prefLength = values.length;
-
-            for (int i = 0; i < prefLength; i++)
-            {
-                weekDayValues[i] = new DayOfWeek(context, values[i]).getWeekDayValue();
-            }
-
-            Arrays.sort(weekDayValues);
-
-            int weekDayLength = weekDayValues.length;
-
-            for (int i = 0; i < weekDayLength; i++)
-            {
-                String day = new DayOfWeek(context, weekDayValues[i]).getWeekDayString();
-
-                valueString += (i != weekDayLength - 1) ? day + ", " : day;
-            }
-
-            pref.setSummary(valueString);
+            pref.setSummary(new CatalystDate(context).sortDate(interval.getValues()));
         }
     }
 }

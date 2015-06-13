@@ -43,20 +43,23 @@ public class TimePreference extends DialogPreference
         calendar = new GregorianCalendar();
     }
 
-    @Override protected View onCreateDialogView()
+    @Override
+    protected View onCreateDialogView()
     {
         picker = new TimePicker(getContext());
         return (picker);
     }
 
-    @Override protected void onBindDialogView(View v)
+    @Override
+    protected void onBindDialogView(View v)
     {
         super.onBindDialogView(v);
         picker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
         picker.setCurrentMinute(calendar.get(Calendar.MINUTE));
     }
 
-    @Override protected void onDialogClosed(boolean positiveResult)
+    @Override
+    protected void onDialogClosed(boolean positiveResult)
     {
         super.onDialogClosed(positiveResult);
 
@@ -74,14 +77,15 @@ public class TimePreference extends DialogPreference
         }
     }
 
-    @Override protected Object onGetDefaultValue(TypedArray a, int index)
+    @Override
+    protected Object onGetDefaultValue(TypedArray a, int index)
     {
         return (a.getString(index));
     }
 
-    @Override protected void onSetInitialValue(boolean restoreValue, Object defaultValue)
+    @Override
+    protected void onSetInitialValue(boolean restoreValue, Object defaultValue)
     {
-
         if (restoreValue)
         {
             if (defaultValue == null)
@@ -104,15 +108,18 @@ public class TimePreference extends DialogPreference
                 calendar.setTimeInMillis(Long.parseLong((String)defaultValue));
             }
         }
+
         setSummary(getSummary());
     }
 
-    @Override public CharSequence getSummary()
+    @Override
+    public CharSequence getSummary()
     {
         if (calendar == null)
         {
             return null;
         }
+
         return DateFormat.getTimeFormat(getContext()).format(new Date(calendar.getTimeInMillis()));
     }
 }

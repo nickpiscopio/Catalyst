@@ -89,9 +89,9 @@ public class DemoActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_skip)
         {
-            SharedPreferences prefs = this.getSharedPreferences(Constant.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
-            prefs.edit().putBoolean(Constant.DEMO_FINISHED, true).commit();
+            prefs.edit().putBoolean(Constant.DEMO_FINISHED, true).apply();
 
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
