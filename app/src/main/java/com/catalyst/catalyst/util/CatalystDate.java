@@ -6,8 +6,10 @@ import com.catalyst.catalyst.preference.DayOfWeek;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * A date helper class.
@@ -74,20 +76,38 @@ public class CatalystDate
      */
     public long getNextAlarm(Set<String> unsortedDays, long alarmTime)
     {
+        Set<String> unsortedTemp = new HashSet<>();
+        unsortedTemp.addAll(unsortedDays);
+
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
 
         String today = new DayOfWeek(context, day - 1).getWeekDayString();
 
-        String nextAlarm = today;
-
         boolean incrementing = false;
 
-        if (calendar.getTimeInMillis() > alarmTime)
-        {
-            unsortedDays.add(today);
+        String nextAlarm = today;
 
-            List<String> days = Arrays.asList(sortDate(unsortedDays).split(DELIMITER));
+        //Today found
+        if (unsortedTemp.contains(today))
+        {
+            long now = calendar.getTimeInMillis();
+            long alarmMillis = getMidnight() + convertTime(alarmTime, TimeZone.getTimeZone("UTC"), TimeZone.getDefault());
+            if (now > alarmMillis)
+            {
+                incrementing = true;
+            }
+        }
+        else
+        {
+            unsortedTemp.add(today);
+
+            incrementing = true;
+        }
+
+        if (incrementing)
+        {
+            List<String> days = Arrays.asList(sortDate(unsortedTemp).split(DELIMITER));
 
             int todayIndex = days.indexOf(today);
 
@@ -135,5 +155,76 @@ public class CatalystDate
         calendar.set(Calendar.MILLISECOND, 0);
 
         return calendar.getTimeInMillis();
+    }
+
+    /**
+     * Gets this morning at midnight.
+     *
+     * @return Midnight today.
+     */
+    private long getMidnight()
+    {
+        Calendar midnight = Calendar.getInstance();
+        midnight.set(Calendar.HOUR_OF_DAY, 0);
+        midnight.set(Calendar.MINUTE, 0);
+        midnight.set(Calendar.SECOND, 0);
+        midnight.set(Calendar.MILLISECOND, 0);
+
+        return midnight.getTimeInMillis();
+    }
+
+    /**
+     * Converts long time from one timezone to another.
+     *
+     * @param time  The time in long format to convert.
+     * @param from  The starting timezone.
+     * @param to    The ending timezone.
+     *
+     * @return  The converted time.
+     */
+    public long convertTime(long time, TimeZone from, TimeZone to)
+    {
+        return time + getTimeZoneOffset(time, from, to);
+    }
+
+    /**
+     * Gets the timezone offset to convert a time.
+     *
+     * @param time  The time in long format to convert.
+     * @param from  The starting timezone.
+     * @param to    The ending timezone.
+     *
+     * @return  The timezone offset.
+     */
+    private long getTimeZoneOffset(long time, TimeZone from, TimeZone to)
+    {
+        int fromOffset = from.getOffset(time);
+        int toOffset = to.getOffset(time);
+        int diff = 0;
+
+        if (fromOffset >= 0)
+        {
+            if (toOffset > 0)
+            {
+                toOffset = -1*toOffset;
+            }
+            else
+            {
+                toOffset = Math.abs(toOffset);
+            }
+
+            diff = (fromOffset+toOffset)*-1;
+        }
+        else
+        {
+            if (toOffset <= 0)
+            {
+                toOffset = -1*Math.abs(toOffset);
+            }
+
+            diff = (Math.abs(fromOffset)+toOffset);
+        }
+
+        return diff;
     }
 }

@@ -2,13 +2,19 @@ package com.catalyst.catalyst.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.util.CatalystDate;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Settings fragment to show the preferences.
@@ -18,6 +24,13 @@ import com.catalyst.catalyst.util.CatalystDate;
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
 {
     private Context context;
+
+    private CheckBoxPreference notification;
+
+    private MultiSelectListPreference interval;
+
+    private Resources res;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +39,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         context = getActivity().getApplicationContext();
 
-        populateSummary(context.getResources().getString(R.string.preference_interval));
+        res = context.getResources();
+
+        notification = (CheckBoxPreference)findPreference(res.getString(R.string.preference_notification));
+
+        interval = (MultiSelectListPreference)findPreference(res.getString(R.string.preference_interval));
+
+        populateSummary(res.getString(R.string.preference_interval));
     }
 
     public void onResume()
@@ -46,7 +65,20 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key)
     {
-        populateSummary(context.getResources().getString(R.string.preference_interval));
+        Preference pref = findPreference(key);
+
+        if (pref instanceof CheckBoxPreference)
+        {
+            if (interval.getValues().size() == 0)
+            {
+                interval.setValues(
+                        new HashSet<>(Arrays.asList(res.getStringArray(R.array.interval))));
+            }
+        }
+        else if (pref instanceof MultiSelectListPreference)
+        {
+            populateSummary(res.getString(R.string.preference_interval));
+        }
     }
 
     /**
@@ -60,9 +92,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         if (pref instanceof MultiSelectListPreference)
         {
-            MultiSelectListPreference interval = (MultiSelectListPreference) pref;
+            Set<String> days = interval.getValues();
 
-            pref.setSummary(new CatalystDate(context).sortDate(interval.getValues()));
+            if (days.size() > 0)
+            {
+                pref.setSummary(new CatalystDate(context).sortDate(interval.getValues()));
+            }
+            else
+            {
+                notification.setChecked(false);
+            }
         }
     }
 }
