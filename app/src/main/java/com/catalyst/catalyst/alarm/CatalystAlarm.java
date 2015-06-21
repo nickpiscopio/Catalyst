@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.catalyst.catalyst.R;
-import com.catalyst.catalyst.util.CatalystDate;
+import com.catalyst.catalyst.util.DateUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -73,7 +73,7 @@ public class CatalystAlarm
             long time = prefs.getLong(res.getString(R.string.preference_time),
                                       Long.valueOf(res.getString(R.string.default_interval_time)));
 
-            long alarmTime = new CatalystDate(context).getNextAlarm(interval, time);
+            long alarmTime = new DateUtil(context).getNextAlarm(interval, time);
 
             alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
             Log.i("Alarm", "Alarm set for: " + alarmTime);

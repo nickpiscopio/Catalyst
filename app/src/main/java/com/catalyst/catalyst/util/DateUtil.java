@@ -12,11 +12,11 @@ import java.util.Set;
 import java.util.TimeZone;
 
 /**
- * A date helper class.
+ * Utility class for dates.
  *
  * Created by Nick Piscopio on 6/13/15.
  */
-public class CatalystDate
+public class DateUtil
 {
     //Needs to be 53 because the first week of the year is 1 and might not be a full week.
     private static final int WEEKS_IN_YEAR = 53;
@@ -25,7 +25,7 @@ public class CatalystDate
 
     private Context context;
 
-    public CatalystDate(Context context)
+    public DateUtil(Context context)
     {
        this.context = context;
     }

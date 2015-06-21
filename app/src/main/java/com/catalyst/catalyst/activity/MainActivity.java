@@ -1,12 +1,19 @@
 package com.catalyst.catalyst.activity;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.catalyst.catalyst.R;
@@ -14,6 +21,7 @@ import com.catalyst.catalyst.alarm.CatalystAlarm;
 import com.catalyst.catalyst.datatransfer.InspirationRetrievalTask;
 import com.catalyst.catalyst.datatransfer.UpdateInspirationsTask;
 import com.catalyst.catalyst.listener.TaskListener;
+import com.catalyst.catalyst.util.ColorUtil;
 import com.catalyst.catalyst.util.Constant;
 
 /**
@@ -29,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
 
     private SharedPreferences prefs;
 
+    private Resources res;
     private Context context;
 
     private TextView inspiration;
@@ -41,8 +50,13 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         setContentView(R.layout.activity_main);
 
         prefs = this.getSharedPreferences(Constant.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        res = getResources();
 
         boolean isDemoFinished = prefs.getBoolean(Constant.DEMO_FINISHED, false);
+
+        context = getApplicationContext();
+
+        setActivityColor(false);
 
         if (!isDemoFinished)
         {
@@ -70,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener
      */
     private void runCatalyst()
     {
-        context = getApplicationContext();
-
         new UpdateInspirationsTask(context, this).execute();
     }
 
@@ -117,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         // Creates the alarm to start sending notifications to the user.
         CatalystAlarm.getInstance(context);
 
+
         inspiration = (TextView) findViewById(R.id.text_inspiration);
         author = (TextView) findViewById(R.id.text_author);
 
@@ -133,16 +146,47 @@ public class MainActivity extends AppCompatActivity implements TaskListener
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(MainActivity.INSPIRATION_ID, result[0]);
                 editor.putString(MainActivity.INSPIRATION_AUTHOR, result[1]);
+                editor.putInt(Constant.INSPIRATION_COLOR, ColorUtil.getRandomNumber(Constant.INSPIRATION_COLOR_MIN, Constant.INSPIRATION_COLOR_MAX));
                 editor.apply();
+
+                setActivityColor(false);
             }
         }
 
         String storedId = prefs.getString(MainActivity.INSPIRATION_ID, "");
         String storedAuthor = "- " + prefs.getString(MainActivity.INSPIRATION_AUTHOR, "");
 
-        int id = storedId.length() > 0 ? getResources().getIdentifier(storedId, "string", getPackageName()) : R.string.positivity_conquer;
+        int id = storedId.length() > 0 ? res.getIdentifier(storedId, "string", getPackageName()) : R.string.positivity_conquer;
 
         inspiration.setText(id);
         author.setText(storedAuthor);
+    }
+
+    private void setActivityColor(boolean transition)
+    {
+        android.support.v7.app.ActionBar bar = getSupportActionBar();
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_inspiration);
+
+        int storedColorResource = ColorUtil.getStoredColor(context);
+
+        if (transition)
+        {
+            int color = Color.TRANSPARENT;
+            Drawable background = layout.getBackground();
+            if (background instanceof ColorDrawable)
+            {
+                color = ((ColorDrawable)background).getColor();
+            }
+
+            ObjectAnimator colorFade = ObjectAnimator.ofObject(layout, "backgroundColor", new ArgbEvaluator(),
+                                                               color, storedColorResource);
+            colorFade.setDuration(1500);
+            colorFade.start();
+        }
+        else
+        {
+            bar.setBackgroundDrawable(new ColorDrawable(storedColorResource));
+            layout.setBackgroundColor(storedColorResource);
+        }
     }
 }

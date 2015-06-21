@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.adapter.PagerAdapter;
+import com.catalyst.catalyst.util.ColorUtil;
 import com.catalyst.catalyst.util.Constant;
 
 /**
@@ -39,7 +41,9 @@ public class DemoActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.light_blue)));
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(
+                new ColorDrawable(getResources().getColor(R.color.light_blue)));
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager)findViewById(R.id.pager);
@@ -91,9 +95,13 @@ public class DemoActivity extends AppCompatActivity
         {
             SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
-            prefs.edit().putBoolean(Constant.DEMO_FINISHED, true).apply();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(Constant.DEMO_FINISHED, true);
+            editor.putInt(Constant.INSPIRATION_COLOR, ColorUtil.getRandomNumber(Constant.INSPIRATION_COLOR_MIN, Constant.INSPIRATION_COLOR_MAX));
+            editor.apply();
 
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(MainActivity.NEW_INSPIRATION, true);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             startActivity(intent);

@@ -10,7 +10,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.catalyst.catalyst.R;
-import com.catalyst.catalyst.util.CatalystDate;
+import com.catalyst.catalyst.util.DateUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -96,7 +96,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
             if (days.size() > 0)
             {
-                pref.setSummary(new CatalystDate(context).sortDate(interval.getValues()));
+                pref.setSummary(new DateUtil(context).sortDate(interval.getValues()));
             }
             else
             {

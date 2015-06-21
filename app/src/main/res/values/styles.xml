@@ -10,7 +10,11 @@
         <item name="android:textColor">@color/dark_blue</item>
     </style>
 
-    <style name="text_bold" parent="text">
+    <style name="text_inspiration">
+        <item name="android:textColor">@color/off_white</item>
+    </style>
+
+    <style name="text_bold">
         <item name="android:textStyle">bold</item>
     </style>
 
