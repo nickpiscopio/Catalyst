@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         }
 
         String storedId = prefs.getString(MainActivity.INSPIRATION_ID, "");
-        String storedAuthor = "- " + prefs.getString(MainActivity.INSPIRATION_AUTHOR, "");
+        String storedAuthor = "—" + prefs.getString(MainActivity.INSPIRATION_AUTHOR, "");
 
         int id = storedId.length() > 0 ? res.getIdentifier(storedId, "string", getPackageName()) : R.string.positivity_conquer;
 
