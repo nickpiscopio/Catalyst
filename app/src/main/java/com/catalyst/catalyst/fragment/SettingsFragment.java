@@ -10,6 +10,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.catalyst.catalyst.R;
+import com.catalyst.catalyst.alarm.CatalystAlarm;
 import com.catalyst.catalyst.util.DateUtil;
 
 import java.util.Arrays;
@@ -79,6 +80,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         {
             populateSummary(res.getString(R.string.preference_interval));
         }
+
+        // Creates the alarm to start sending notifications to the user.
+        CatalystAlarm.getInstance(context);
     }
 
     /**

@@ -13,6 +13,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="150dp"
+            android:layout_marginTop="@dimen/margins"
             android:layout_marginBottom="@dimen/demo_image_margin"
             android:layout_gravity="center_horizontal"
             android:src="@mipmap/demo_logo"/>
@@ -24,7 +25,7 @@
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/title"
             android:layout_marginTop="@dimen/about_description_margin"
-            style="@style/text_bold"/>
+            style="@style/text_title_bold"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/text_normal"
             android:layout_marginTop="@dimen/margins"
-            style="@style/text_bold"/>
+            style="@style/text_title_bold"/>
 
         <TextView
             android:layout_width="wrap_content"

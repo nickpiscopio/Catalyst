@@ -129,12 +129,13 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         // Creates the alarm to start sending notifications to the user.
         CatalystAlarm.getInstance(context);
 
-
         inspiration = (TextView) findViewById(R.id.text_inspiration);
         author = (TextView) findViewById(R.id.text_author);
 
+        Intent intent = getIntent();
+
         //If get new inspiration
-        if (getIntent().getBooleanExtra(NEW_INSPIRATION, false))
+        if (intent.getBooleanExtra(NEW_INSPIRATION, false))
         {
             if (result.length == 0)
             {
@@ -150,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener
                 editor.apply();
 
                 setActivityColor(false);
+
+                intent.putExtra(NEW_INSPIRATION, false);
             }
         }
 

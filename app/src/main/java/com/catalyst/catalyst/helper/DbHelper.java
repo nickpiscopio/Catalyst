@@ -25,6 +25,8 @@ public class DbHelper extends SQLiteOpenHelper
     private static final String NOT_NULL = " NOT NULL";
     private static final String COMMA_SEP = ",";
 
+    private static final String CATEGORY_HOLIDAY = "Holiday";
+
     private static final long ELIGIBLE_INSPIRATION_DATE =  Calendar.getInstance().getTimeInMillis() - 604800000;
 
     private static final String SQL_CREATE_ENTRIES =
@@ -45,6 +47,7 @@ public class DbHelper extends SQLiteOpenHelper
                                                  InspirationTable.COLUMN_NAME_AUTHOR +
                                                  " FROM " + InspirationTable.TABLE_NAME +
                                                  " WHERE " + InspirationTable.COLUMN_NAME_HIDDEN + " = 0 AND " +
+                                                 InspirationTable.COLUMN_NAME_CATEGORY + " != '" + CATEGORY_HOLIDAY + "' AND " +
                                                  InspirationTable.COLUMN_NAME_DATE_DISPLAYED + " < " +
                                                  String.valueOf(ELIGIBLE_INSPIRATION_DATE) + " ORDER BY RANDOM() LIMIT 1";
 
