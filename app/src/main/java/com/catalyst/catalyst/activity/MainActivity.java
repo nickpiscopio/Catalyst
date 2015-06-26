@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +26,7 @@ import com.catalyst.catalyst.datatransfer.UpdateInspirationsTask;
 import com.catalyst.catalyst.listener.TaskListener;
 import com.catalyst.catalyst.util.ColorUtil;
 import com.catalyst.catalyst.util.Constant;
+import com.catalyst.catalyst.util.ScreenshotUtil;
 
 /**
  * Main view of Catalyst.
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener
     private Resources res;
     private Context context;
 
+    private LinearLayout layout;
+
     private TextView inspiration;
     private TextView author;
 
@@ -55,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         boolean isDemoFinished = prefs.getBoolean(Constant.DEMO_FINISHED, false);
 
         context = getApplicationContext();
+
+        layout = (LinearLayout) findViewById(R.id.layout_inspiration);
 
         setActivityColor(false);
 
@@ -84,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements TaskListener
      */
     private void runCatalyst()
     {
+        inspiration = (TextView) findViewById(R.id.text_inspiration);
+        author = (TextView) findViewById(R.id.text_author);
+
         new UpdateInspirationsTask(context, this).execute();
     }
 
@@ -108,6 +119,17 @@ public class MainActivity extends AppCompatActivity implements TaskListener
             case R.id.action_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 break;
+            case R.id.action_share:
+                ScreenshotUtil ssUtil = new ScreenshotUtil();
+                Bitmap screenshot = ssUtil.takeScreenShot(layout);
+
+                String path = MediaStore.Images.Media.insertImage(getContentResolver(), screenshot, "title", null);
+                Uri screenshotUri = Uri.parse(path);
+
+                intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/png");
+                intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                break;
             default:
                 break;
         }
@@ -128,9 +150,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener
     {
         // Creates the alarm to start sending notifications to the user.
         CatalystAlarm.getInstance(context);
-
-        inspiration = (TextView) findViewById(R.id.text_inspiration);
-        author = (TextView) findViewById(R.id.text_author);
 
         Intent intent = getIntent();
 
@@ -165,10 +184,14 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         author.setText(storedAuthor);
     }
 
+    /**
+     * Sets the background color of the activity.
+     *
+     * @param transition    Boolean value of whether to use a transition or not.
+     */
     private void setActivityColor(boolean transition)
     {
         android.support.v7.app.ActionBar bar = getSupportActionBar();
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_inspiration);
 
         int storedColorResource = ColorUtil.getStoredColor(context);
 

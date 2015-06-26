@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="@dimen/about_description_margin"
         android:text="@string/positivity_conquer"
         android:textSize="@dimen/title"/>
 
