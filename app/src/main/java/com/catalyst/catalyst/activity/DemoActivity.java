@@ -35,6 +35,8 @@ public class DemoActivity extends AppCompatActivity
     private ImageView pager1;
     private ImageView pager2;
 
+    private Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -80,6 +82,7 @@ public class DemoActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+        this.menu = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_demo, menu);
 
@@ -140,6 +143,9 @@ public class DemoActivity extends AppCompatActivity
                     pager0.setImageResource(PAGER_UNSELECTED_RESOURCE);
                     pager1.setImageResource(PAGER_UNSELECTED_RESOURCE);
                     pager2.setImageResource(PAGER_SELECTED_RESOURCE);
+
+                    MenuItem menuItem = menu.findItem(R.id.action_skip);
+                    menuItem.setTitle(getApplicationContext().getResources().getString(R.string.action_done));
                     break;
                 default:
                     break;

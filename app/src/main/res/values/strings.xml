@@ -5,6 +5,7 @@
     <string name="copyright">&#169;2015. All Rights Reserved. Catalyst.</string>
 
     <string name="action_skip">Skip</string>
+    <string name="action_done">Done</string>
     <string name="action_about">About</string>
     <string name="action_settings">Settings</string>
 
