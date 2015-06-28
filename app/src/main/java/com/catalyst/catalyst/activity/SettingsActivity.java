@@ -6,8 +6,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.fragment.SettingsFragment;
-import com.catalyst.catalyst.util.ColorUtil;
 
 /**
  * Settings screen for Catalyst.
@@ -21,9 +21,12 @@ public class SettingsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setBackgroundDrawable(
-                new ColorDrawable(ColorUtil.getStoredColor(getApplicationContext())));
+
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setBackgroundDrawable(new ColorDrawable(getApplicationContext().getResources().getColor(R.color.green)));
+        }
 
         getFragmentManager().beginTransaction().replace(android.R.id.content,
                                                         new SettingsFragment()).commit();

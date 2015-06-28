@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
      */
     private void setActivityColor(boolean transition)
     {
-        android.support.v7.app.ActionBar bar = getSupportActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
         int storedColorResource = ColorUtil.getStoredColor(context);
 
@@ -211,7 +211,11 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         }
         else
         {
-            bar.setBackgroundDrawable(new ColorDrawable(storedColorResource));
+            if (actionBar != null)
+            {
+                actionBar.setBackgroundDrawable(new ColorDrawable(storedColorResource));
+            }
+
             layout.setBackgroundColor(storedColorResource);
         }
     }

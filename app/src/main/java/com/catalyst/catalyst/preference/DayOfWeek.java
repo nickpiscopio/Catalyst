@@ -85,7 +85,7 @@ public class DayOfWeek
          */
         public static WeekDay fromInt(int i)
         {
-            WeekDay type = intToTypeMap.get(Integer.valueOf(i));
+            WeekDay type = intToTypeMap.get(i);
 
             if (type == null)
             {

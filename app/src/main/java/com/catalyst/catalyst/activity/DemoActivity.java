@@ -20,7 +20,7 @@ import com.catalyst.catalyst.util.Constant;
 /**
  * Screens to demo the application before the user commits to Catalyst.
  *
- * Created by nickpiscopio on 5/8/15.
+ * Created by Nick Piscopio on 5/8/15.
  */
 public class DemoActivity extends AppCompatActivity
 {
@@ -42,8 +42,12 @@ public class DemoActivity extends AppCompatActivity
         setContentView(R.layout.activity_demo);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(
-                new ColorDrawable(getResources().getColor(R.color.light_blue)));
+
+        if (actionBar != null)
+        {
+            actionBar.setBackgroundDrawable(
+                    new ColorDrawable(getResources().getColor(R.color.light_blue)));
+        }
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager)findViewById(R.id.pager);

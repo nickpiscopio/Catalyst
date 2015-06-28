@@ -63,7 +63,7 @@ public class UpdateInspirationsTask extends AsyncTask<Void, Void, Void>
                 reviewJson(obj);
             }
 
-            prefs.edit().putInt(JSON_VERSION, jsonFileVersion).commit();
+            prefs.edit().putInt(JSON_VERSION, jsonFileVersion).apply();
         }
         catch (JSONException e)
         {

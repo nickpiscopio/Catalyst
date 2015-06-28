@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.catalyst.catalyst.R;
-import com.catalyst.catalyst.util.ColorUtil;
 
 /**
  * Catalyst about screen.
@@ -23,8 +22,13 @@ public class AboutActivity extends AppCompatActivity
         setContentView(R.layout.activity_about);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setBackgroundDrawable(new ColorDrawable(ColorUtil.getStoredColor(getApplicationContext())));
+
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setBackgroundDrawable(new ColorDrawable(getApplicationContext().getResources().getColor(R.color.light_blue)));
+        }
+
     }
 
     @Override

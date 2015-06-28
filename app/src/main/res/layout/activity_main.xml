@@ -17,13 +17,13 @@
         android:textSize="@dimen/title"/>
 
     <TextView
-        style="@style/text_inspiration"
+        style="@style/text_author"
         android:id="@+id/text_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/about_description_margin"
         android:layout_gravity="end"
-        android:text="- Catalyst"
+        android:text="-Catalyst"
         android:textSize="@dimen/text_normal"/>
 
 </LinearLayout>

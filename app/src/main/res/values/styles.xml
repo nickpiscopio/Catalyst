@@ -1,17 +1,21 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!--<item name="colorPrimary">@color/secondary</item>-->
-        <!--<item name="colorPrimaryDark">@color/secondary_dark</item>-->
+        <!--<item name="colorPrimary">@color/light_blue</item>-->
+        <!--<item name="colorPrimaryDark">@color/light_blue</item>-->
         <!--<item name="android:windowActionBar">true</item>-->
     </style>
 
-    <style name="text">
+    <style name="text" parent="AppTheme">
         <item name="android:textColor">@color/dark_blue</item>
     </style>
 
     <style name="text_inspiration">
         <item name="android:textColor">@color/off_white</item>
+    </style>
+
+    <style name="text_author" parent="text_inspiration">
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="text_title_bold" parent="text">
