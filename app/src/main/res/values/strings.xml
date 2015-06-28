@@ -46,7 +46,7 @@
     <!-- Inspirations -->
     <string name="appearance_perfect">You are <b>perfect</b> the way you are!</string>
     <string name="appearance_beauty_in_and_out">You are <b>beautiful</b> inside and out!</string>
-    <string name="appearance_beauty_different">You are <b>beautiful</b>! Don\'t let anyone tell you anything different.</string>
+    <string name="appearance_beauty_different">You are <b>beautiful</b>! Remember that!</string>
     <string name="personality_great_friend">You are a great friend. <b>Don\'t forget it</b>!</string>
     <string name="positivity_simplify"><b>Simplify</b> today one step at a time.</string>
     <string name="positivity_believe"><b>Believe</b> in yourself!</string>
@@ -59,9 +59,9 @@
     <string name="positivity_mirror">Look in the mirror and repeat these words, <b>"I am going to seize this day!"</b> After you\'re done, say it again because I couldn\'t hear you!</string>
     <string name="positivity_focus">Focus on the future because the past is the past, and there is nothing we can do about it now.</string>
     <string name="positivity_live"><b>Live</b> today like you mean it!</string>
-    <string name="positivity_uno">You are numero <b>uno</b>!</string>
+    <string name="positivity_uno">You <i>are</i> numero <b>uno</b>!</string>
     <string name="positivity_good_time">Have a good time today. You deserve it!</string>
-    <string name="positivity_world">The world is a little better just because you\'re in it!</string>
+    <string name="positivity_world">The world <i>is</i> a little <b>better</b> just because you\'re in it!</string>
     <string name="positivity_today">Today is a little better just from knowing you!</string>
     <string name="positivity_make_today_count">Make today <b>count</b> because it won\'t be coming back!</string>
     <string name="positivity_think_positive">Think <b>positive</b> thoughts today!</string>
@@ -74,7 +74,7 @@
     <string name="success_destiny">Don\'t wait for <b>destiny</b> to come knocking at your door; <b>create</b> your own!</string>
     <string name="success_winner">You\'re a <b>winner</b>!</string>
     <string name="success_today">You\'ll do great today!</string>
-    <string name="success_no_failure">There is no failure as long as you try.</string>
+    <string name="success_no_failure">There is no failure as long as you <b>try</b>.</string>
     <string name="success_success_in_failure">There is <b>success</b> in failure. Search for it!</string>
     <string name="holiday_valentines">Happy Valentine\'s Day!</string>
     <string name="holiday_birthday">Happy Birthday!</string>

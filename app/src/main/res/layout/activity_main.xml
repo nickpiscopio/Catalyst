@@ -1,29 +1,39 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_inspiration"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/margins"
-    android:gravity="center_vertical">
+    android:orientation="vertical">
 
-    <TextView
-        style="@style/text_inspiration"
-        android:id="@+id/text_inspiration"
+    <View
+        android:id="@+id/view_action_bar_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/positivity_conquer"
-        android:textSize="@dimen/title"/>
+        android:layout_height="56dp"/>
 
-    <TextView
-        style="@style/text_author"
-        android:id="@+id/text_author"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/about_description_margin"
-        android:layout_gravity="end"
-        android:text="-Catalyst"
-        android:textSize="@dimen/text_normal"/>
+    <LinearLayout
+        android:id="@+id/layout_inspiration"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/margins"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/text_inspiration"
+            android:id="@+id/text_inspiration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/title"/>
+
+        <TextView
+            style="@style/text_author"
+            android:id="@+id/text_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/about_description_margin"
+            android:layout_gravity="end"
+            android:textSize="@dimen/text_normal"/>
+
+    </LinearLayout>
 
 </LinearLayout>

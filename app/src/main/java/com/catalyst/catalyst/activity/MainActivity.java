@@ -16,6 +16,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
     private Resources res;
     private Context context;
 
-    private LinearLayout layout;
+    private LinearLayout layoutInspiration;
 
     private TextView inspiration;
     private TextView author;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_main);
 
         prefs = this.getSharedPreferences(Constant.SHARED_PREFERENCES, Context.MODE_PRIVATE);
@@ -62,9 +65,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
 
         context = getApplicationContext();
 
-        layout = (LinearLayout) findViewById(R.id.layout_inspiration);
-
-        setActivityColor(false);
+        layoutInspiration = (LinearLayout) findViewById(R.id.layout_inspiration);
 
         if (!isDemoFinished)
         {
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         }
         else
         {
+            setActivityColor(false);
+
             runCatalyst();
         }
     }
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
                 break;
             case R.id.action_share:
                 ScreenshotUtil ssUtil = new ScreenshotUtil();
-                Bitmap screenshot = ssUtil.takeScreenShot(layout);
+                Bitmap screenshot = ssUtil.takeScreenShot(layoutInspiration);
 
                 String path = MediaStore.Images.Media.insertImage(getContentResolver(), screenshot, "title", null);
                 Uri screenshotUri = Uri.parse(path);
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener
                 editor.putInt(Constant.INSPIRATION_COLOR, ColorUtil.getRandomNumber(Constant.INSPIRATION_COLOR_MIN, Constant.INSPIRATION_COLOR_MAX));
                 editor.apply();
 
-                setActivityColor(false);
+                setActivityColor(true);
 
                 intent.putExtra(NEW_INSPIRATION, false);
             }
@@ -193,30 +196,40 @@ public class MainActivity extends AppCompatActivity implements TaskListener
     {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
+        if (actionBar != null)
+        {
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        View actionBarBackground = findViewById(R.id.view_action_bar_background);
+
         int storedColorResource = ColorUtil.getStoredColor(context);
 
         if (transition)
         {
+            int fadeDuration = 1700;
             int color = Color.TRANSPARENT;
-            Drawable background = layout.getBackground();
+            Drawable background = actionBarBackground.getBackground();
             if (background instanceof ColorDrawable)
             {
                 color = ((ColorDrawable)background).getColor();
             }
 
-            ObjectAnimator colorFade = ObjectAnimator.ofObject(layout, "backgroundColor", new ArgbEvaluator(),
+            ObjectAnimator colorFade = ObjectAnimator.ofObject(actionBarBackground, "backgroundColor", new ArgbEvaluator(),
                                                                color, storedColorResource);
-            colorFade.setDuration(1500);
+
+            ObjectAnimator colorFade2 = ObjectAnimator.ofObject(layoutInspiration, "backgroundColor", new ArgbEvaluator(),
+                                                               color, storedColorResource);
+            colorFade.setDuration(fadeDuration);
+            colorFade2.setDuration(fadeDuration);
+
             colorFade.start();
+            colorFade2.start();
         }
         else
         {
-            if (actionBar != null)
-            {
-                actionBar.setBackgroundDrawable(new ColorDrawable(storedColorResource));
-            }
-
-            layout.setBackgroundColor(storedColorResource);
+            actionBarBackground.setBackgroundColor(storedColorResource);
+            layoutInspiration.setBackgroundColor(storedColorResource);
         }
     }
 }
