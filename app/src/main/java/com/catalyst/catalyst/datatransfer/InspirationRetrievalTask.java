@@ -89,8 +89,6 @@ public class InspirationRetrievalTask extends AsyncTask<Void, Void, Void>
                 Record record = new Record(InspirationTable.TABLE_NAME, values);
                 record.setWhereClause(InspirationTable.COLUMN_NAME_ID + " = '" + inspirationId + "'");
 
-                Log.i("Where clause", InspirationTable.COLUMN_NAME_ID + " = '" + inspirationId + "'");
-
                 records.add(record);
 
             } while(cursor.moveToNext());

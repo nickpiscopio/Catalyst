@@ -76,7 +76,6 @@ public class CatalystAlarm
             long alarmTime = new DateUtil(context).getNextAlarm(interval, time);
 
             alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
-            Log.i("Alarm", "Alarm set for: " + alarmTime);
         }
     }
 }

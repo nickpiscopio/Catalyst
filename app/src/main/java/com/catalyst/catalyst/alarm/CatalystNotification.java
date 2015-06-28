@@ -24,8 +24,6 @@ public class CatalystNotification extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Log.i("Alarm", "Received alarm");
-
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         Intent mainActivityIntent = new Intent(context, MainActivity.class);
