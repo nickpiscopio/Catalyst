@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.util.DateUtil;
@@ -69,11 +68,19 @@ public class CatalystAlarm
             Set<String> interval = prefs.getStringSet(res.getString(R.string.preference_interval),
                                                       new HashSet<>(Arrays.asList(res.getStringArray(R.array.interval))));
 
-            //This time is set from today in milliseconds.
-            long time = prefs.getLong(res.getString(R.string.preference_time),
-                                      Long.valueOf(res.getString(R.string.default_interval_time)));
+            DateUtil dateUtil = new DateUtil(context);
 
-            long alarmTime = new DateUtil(context).getNextAlarm(interval, time);
+            long convertedDefaultTime = dateUtil.convertDefaultTime();
+
+            //This time is set from today in milliseconds.
+            long time = prefs.getLong(res.getString(R.string.preference_time), convertedDefaultTime);
+
+            if (time == convertedDefaultTime)
+            {
+                dateUtil.storeDefaultTime(convertedDefaultTime);
+            }
+
+            long alarmTime = dateUtil.getNextAlarm(interval, time);
 
             alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
         }

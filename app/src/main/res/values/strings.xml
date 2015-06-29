@@ -37,7 +37,7 @@
     <string name="positive_set">Set</string>
 
     <string name="default_notification_flag">true</string>
-    <string name="default_interval_time">54000000</string>
+    <string name="default_interval_time">36000000</string>
 
     <!-- Preference Keys -->
     <string name="preference_notification">preference_notification</string>
@@ -51,9 +51,9 @@
     <string name="personality_great_friend">You are a great friend. <b>Don\'t forget it</b>!</string>
     <string name="positivity_simplify"><b>Simplify</b> today one step at a time.</string>
     <string name="positivity_believe"><b>Believe</b> in yourself!</string>
-    <string name="positivity_exploring">Life is a mystery. Go exploring!</string>
+    <string name="positivity_exploring">Life is a <i>mystery</i>. Go exploring!</string>
     <string name="positivity_great_day">Have a <b>great</b> day!</string>
-    <string name="positivity_favor">Stay positive because everything will work out in your favor.</string>
+    <string name="positivity_favor">Stay <b>positive</b> because everything will work out in your favor.</string>
     <string name="positivity_conquer"><b>Today</b> is your day; <b>conquer</b> it!</string>
     <string name="positivity_awesome">You\'re <b>awesome</b>! Don\'t forget it!</string>
     <string name="positivity_exist">You exist. You are a real person, and you <b>matter</b>!</string>

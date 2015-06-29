@@ -22,7 +22,6 @@
         <com.catalyst.catalyst.preference.TimePreference
             android:key="@string/preference_time"
             android:dependency="@string/preference_notification"
-            android:defaultValue="@string/default_interval_time"
             android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/settings_time_title" />
 

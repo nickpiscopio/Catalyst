@@ -1,7 +1,10 @@
 package com.catalyst.catalyst.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
+import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.preference.DayOfWeek;
 
 import java.util.Arrays;
@@ -185,6 +188,22 @@ public class DateUtil
     public long convertTime(long time, TimeZone from, TimeZone to)
     {
         return time + getTimeZoneOffset(time, from, to);
+    }
+
+    public long convertDefaultTime()
+    {
+        long defaultTime = Long.valueOf(context.getResources().getString(
+                R.string.default_interval_time));
+        long convertedDefaultTime = convertTime(defaultTime, TimeZone.getDefault(),
+                                                TimeZone.getTimeZone("UTC"));
+
+        return convertedDefaultTime;
+    }
+
+    public void storeDefaultTime(long defaultTime)
+    {
+        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        prefs.putLong(context.getResources().getString(R.string.preference_time), defaultTime).apply();
     }
 
     /**

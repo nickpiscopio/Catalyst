@@ -73,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener
         }
         else
         {
-            setActivityColor(false);
-
             runCatalyst();
         }
     }
@@ -97,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener
     {
         inspiration = (TextView) findViewById(R.id.text_inspiration);
         author = (TextView) findViewById(R.id.text_author);
+
+        setActivityColor(false);
 
         new UpdateInspirationsTask(context, this).execute();
     }
