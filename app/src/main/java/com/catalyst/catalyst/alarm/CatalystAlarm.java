@@ -9,11 +9,13 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 import com.catalyst.catalyst.R;
+import com.catalyst.catalyst.util.Constant;
 import com.catalyst.catalyst.util.DateUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * Singleton class for the alarm in Catalyst.
@@ -70,17 +72,19 @@ public class CatalystAlarm
 
             DateUtil dateUtil = new DateUtil(context);
 
-            long convertedDefaultTime = dateUtil.convertDefaultTime();
+            long defaultUTCTime = dateUtil.getDefaultTime();
 
-            //This time is set from today in milliseconds.
-            long time = prefs.getLong(res.getString(R.string.preference_time), convertedDefaultTime);
+            //This time is set from today in milliseconds and UTC.
+            long storedTime = prefs.getLong(res.getString(R.string.preference_time), defaultUTCTime);
+            long convertedTime = dateUtil.convertTime(storedTime, TimeZone.getDefault(),
+                                                      TimeZone.getTimeZone(Constant.TIMEZONE_UTC));
 
-            if (time == convertedDefaultTime)
+            if (storedTime == defaultUTCTime)
             {
-                dateUtil.storeDefaultTime(convertedDefaultTime);
+                dateUtil.storeDefaultTime(defaultUTCTime);
             }
 
-            long alarmTime = dateUtil.getNextAlarm(interval, time);
+            long alarmTime = dateUtil.getNextAlarm(interval, convertedTime);
 
             alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
         }

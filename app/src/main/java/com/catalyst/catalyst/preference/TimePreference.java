@@ -9,10 +9,13 @@ import android.view.View;
 import android.widget.TimePicker;
 
 import com.catalyst.catalyst.R;
+import com.catalyst.catalyst.util.Constant;
+import com.catalyst.catalyst.util.DateUtil;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Time preference node for the preference screen.
@@ -23,6 +26,10 @@ public class TimePreference extends DialogPreference
 {
     private Calendar calendar;
     private TimePicker picker = null;
+
+    private DateUtil dateUtil;
+
+    Context context;
 
     public TimePreference(Context ctxt)
     {
@@ -38,9 +45,13 @@ public class TimePreference extends DialogPreference
     {
         super(ctxt, attrs, defStyle);
 
+        this.context = ctxt;
+
         setPositiveButtonText(R.string.positive_set);
 
         calendar = new GregorianCalendar();
+
+        dateUtil = new DateUtil(context);
     }
 
     @Override
@@ -69,9 +80,16 @@ public class TimePreference extends DialogPreference
             calendar.set(Calendar.MINUTE, picker.getCurrentMinute());
 
             setSummary(getSummary());
-            if (callChangeListener(calendar.getTimeInMillis()))
+
+            long millis = calendar.getTimeInMillis();
+
+            if (callChangeListener(millis))
             {
-                persistLong(calendar.getTimeInMillis());
+                long settingsTime = dateUtil.convertTime(millis, TimeZone.getTimeZone(
+                        Constant.TIMEZONE_UTC),
+                                                         TimeZone.getDefault());
+                persistLong(settingsTime);
+
                 notifyChanged();
             }
         }
@@ -86,28 +104,11 @@ public class TimePreference extends DialogPreference
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue)
     {
-        if (restoreValue)
-        {
-            if (defaultValue == null)
-            {
-                calendar.setTimeInMillis(getPersistedLong(System.currentTimeMillis()));
-            }
-            else
-            {
-                calendar.setTimeInMillis(Long.parseLong(getPersistedString((String)defaultValue)));
-            }
-        }
-        else
-        {
-            if (defaultValue == null)
-            {
-                calendar.setTimeInMillis(System.currentTimeMillis());
-            }
-            else
-            {
-                calendar.setTimeInMillis(Long.parseLong((String)defaultValue));
-            }
-        }
+        long persistedLong = getPersistedLong(Long.valueOf(context.getResources().getString(R.string.default_interval_time)));
+        long convertedDate = dateUtil.convertTime(persistedLong, TimeZone.getDefault(),
+                TimeZone.getTimeZone(Constant.TIMEZONE_UTC));
+
+        calendar.setTimeInMillis(convertedDate);
 
         setSummary(getSummary());
     }
@@ -120,6 +121,6 @@ public class TimePreference extends DialogPreference
             return null;
         }
 
-        return DateFormat.getTimeFormat(getContext()).format(new Date(calendar.getTimeInMillis()));
+        return DateFormat.getTimeFormat(context).format(new Date(calendar.getTimeInMillis()));
     }
 }

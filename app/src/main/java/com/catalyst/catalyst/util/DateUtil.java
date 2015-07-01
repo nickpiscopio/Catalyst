@@ -95,7 +95,7 @@ public class DateUtil
         if (unsortedTemp.contains(today))
         {
             long now = calendar.getTimeInMillis();
-            long alarmMillis = getMidnight() + convertTime(alarmTime, TimeZone.getTimeZone("UTC"), TimeZone.getDefault());
+            long alarmMillis = getMidnight() + convertTime(alarmTime, TimeZone.getTimeZone(Constant.TIMEZONE_UTC), TimeZone.getDefault());
             if (now > alarmMillis)
             {
                 incrementing = true;
@@ -180,45 +180,50 @@ public class DateUtil
      * Converts long time from one timezone to another.
      *
      * @param time  The time in long format to convert.
-     * @param from  The starting timezone.
-     * @param to    The ending timezone.
+     * @param to    The starting timezone.
+     * @param from  The ending timezone.
      *
      * @return  The converted time.
      */
-    public long convertTime(long time, TimeZone from, TimeZone to)
+    public long convertTime(long time, TimeZone to, TimeZone from)
     {
-        return time + getTimeZoneOffset(time, from, to);
+        return time + getTimeZoneOffset(time, to, from);
     }
 
-    public long convertDefaultTime()
+    /**
+     * Gets the default time which is stored in UTC.
+     *
+     * @return  The default UTC time.
+     */
+    public long getDefaultTime()
     {
-        long defaultTime = Long.valueOf(context.getResources().getString(
-                R.string.default_interval_time));
-        long convertedDefaultTime = convertTime(defaultTime, TimeZone.getDefault(),
-                                                TimeZone.getTimeZone("UTC"));
-
-        return convertedDefaultTime;
+        return Long.valueOf(context.getResources().getString(R.string.default_interval_time));
     }
 
-    public void storeDefaultTime(long defaultTime)
+    /**
+     * Stores the default time.
+     *
+     * @param time   The time to store.
+     */
+    public void storeDefaultTime(long time)
     {
         SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        prefs.putLong(context.getResources().getString(R.string.preference_time), defaultTime).apply();
+        prefs.putLong(context.getResources().getString(R.string.preference_time), time).apply();
     }
 
     /**
      * Gets the timezone offset to convert a time.
      *
      * @param time  The time in long format to convert.
-     * @param from  The starting timezone.
      * @param to    The ending timezone.
+     * @param from  The starting timezone.
      *
      * @return  The timezone offset.
      */
-    private long getTimeZoneOffset(long time, TimeZone from, TimeZone to)
+    private long getTimeZoneOffset(long time, TimeZone to, TimeZone from)
     {
-        int fromOffset = from.getOffset(time);
-        int toOffset = to.getOffset(time);
+        int fromOffset = to.getOffset(time);
+        int toOffset = from.getOffset(time);
         int diff = 0;
 
         if (fromOffset >= 0)
