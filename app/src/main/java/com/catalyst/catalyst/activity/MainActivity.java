@@ -8,12 +8,14 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +25,10 @@ import android.widget.TextView;
 
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.alarm.CatalystAlarm;
+import com.catalyst.catalyst.datatransfer.ImageRetriever;
 import com.catalyst.catalyst.datatransfer.InspirationRetrievalTask;
 import com.catalyst.catalyst.datatransfer.UpdateInspirationsTask;
+import com.catalyst.catalyst.listener.ImageRetrievalListener;
 import com.catalyst.catalyst.listener.TaskListener;
 import com.catalyst.catalyst.util.ColorUtil;
 import com.catalyst.catalyst.util.Constant;
@@ -35,7 +39,7 @@ import com.catalyst.catalyst.util.ScreenshotUtil;
  *
  * Created by Nick Piscopio on 5/8/15.
  */
-public class MainActivity extends AppCompatActivity implements TaskListener
+public class MainActivity extends AppCompatActivity implements TaskListener, ImageRetrievalListener
 {
     public static final String NEW_INSPIRATION = "new.inspiration";
     private static final String INSPIRATION_ID = "com.catalyst.catalyst.inspiration.id";
@@ -209,6 +213,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener
      */
     private void setActivityColor(boolean transition)
     {
+        new ImageRetriever(this);
+
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null)
@@ -246,5 +252,13 @@ public class MainActivity extends AppCompatActivity implements TaskListener
             actionBarBackground.setBackgroundColor(storedColorResource);
             layoutInspiration.setBackgroundColor(storedColorResource);
         }
+    }
+
+    @Override
+    public void onImageRetrieved(Bitmap image)
+    {
+        BitmapDrawable backgroundDrawable = new BitmapDrawable(getResources(), image);
+        backgroundDrawable.setGravity(Gravity.CENTER); // also LEFT, CENTER_VERTICAL, etc.
+        layoutInspiration.setBackground(backgroundDrawable);
     }
 }

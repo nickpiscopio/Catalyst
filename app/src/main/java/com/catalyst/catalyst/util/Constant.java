@@ -7,6 +7,8 @@ package com.catalyst.catalyst.util;
  */
 public class Constant
 {
+    public static final String TAG = "Catalyst";
+
     public static final String SHARED_PREFERENCES = "com.catalyst.catalyst.shared.preferences";
     public static final String DEMO_FINISHED = "com.catalyst.catalyst.demo.finished";
 
