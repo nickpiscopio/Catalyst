@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener
     private TextView inspiration;
     private TextView author;
 
+    private Uri screenshotUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -126,8 +128,9 @@ public class MainActivity extends AppCompatActivity implements TaskListener
                 ScreenshotUtil ssUtil = new ScreenshotUtil();
                 Bitmap screenshot = ssUtil.takeScreenShot(layoutInspiration);
 
-                String path = MediaStore.Images.Media.insertImage(getContentResolver(), screenshot, "title", null);
-                Uri screenshotUri = Uri.parse(path);
+                String path = MediaStore.Images.Media
+                        .insertImage(getContentResolver(), screenshot, "title", null);
+                screenshotUri = Uri.parse(path);
 
                 intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/png");
@@ -139,10 +142,22 @@ public class MainActivity extends AppCompatActivity implements TaskListener
 
         if (intent != null)
         {
-            startActivity(intent);
+            startActivityForResult(intent, Constant.ACTIVITY_RESULT_SHARE_INSPIRATION);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constant.ACTIVITY_RESULT_SHARE_INSPIRATION)
+        {
+            // Delete the image from the device after sharing.
+            getContentResolver().delete(screenshotUri, null, null);
+        }
     }
 
     /**

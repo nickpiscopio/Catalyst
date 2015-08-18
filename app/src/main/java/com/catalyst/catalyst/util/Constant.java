@@ -16,4 +16,6 @@ public class Constant
 
     public static final int INSPIRATION_COLOR_MIN = 0;
     public static final int INSPIRATION_COLOR_MAX = 3;
+
+    public static final int ACTIVITY_RESULT_SHARE_INSPIRATION = 1;
 }
