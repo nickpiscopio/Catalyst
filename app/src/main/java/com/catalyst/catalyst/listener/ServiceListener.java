@@ -9,5 +9,7 @@ import org.json.JSONObject;
  */
 public interface ServiceListener
 {
-    void onJSONRetreived(JSONObject json);
+    void onRetrievalSuccessfully(JSONObject json);
+
+    void onRetrievalFailed();
 }

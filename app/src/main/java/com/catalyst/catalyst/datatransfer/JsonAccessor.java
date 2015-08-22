@@ -19,11 +19,13 @@ import java.net.URLConnection;
  *
  * Created by Nick Piscopio on 6/6/15.
  */
-public class FlickrTask extends AsyncTask<String, Void, JSONObject>
+public class JsonAccessor extends AsyncTask<String, Void, JSONObject>
 {
     private ServiceListener serviceListener;
 
-    public FlickrTask(ServiceListener serviceListener)
+    private boolean success;
+
+    public JsonAccessor(ServiceListener serviceListener)
     {
         this.serviceListener = serviceListener;
     }
@@ -68,7 +70,6 @@ public class FlickrTask extends AsyncTask<String, Void, JSONObject>
         {
             try
             {
-
                 reader.close();
             }
 
@@ -80,13 +81,17 @@ public class FlickrTask extends AsyncTask<String, Void, JSONObject>
         //Parse the String to JSONObject
         try
         {
-            jsonObject = new JSONObject(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+//            jsonObject = new JSONObject(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
 
-//            jsonObject = new JSONObject(text);
+            jsonObject = new JSONObject(text);
+
+            success = true;
         }
         catch(JSONException e)
         {
             Log.e(Constant.TAG, "Error parsing data " + e.toString());
+
+            success = false;
         }
 
         return jsonObject;
@@ -95,6 +100,14 @@ public class FlickrTask extends AsyncTask<String, Void, JSONObject>
     @Override
     protected void onPostExecute(JSONObject json)
     {
-        serviceListener.onJSONRetreived(json);
+        if (success)
+        {
+            serviceListener.onRetrievalSuccessfully(json);
+        }
+        else
+        {
+            serviceListener.onRetrievalFailed();
+        }
+
     }
 }

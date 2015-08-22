@@ -1,63 +1,81 @@
 package com.catalyst.catalyst.datatransfer;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.util.Log;
 
-import com.catalyst.catalyst.listener.ImageRetrievalListener;
+import com.catalyst.catalyst.listener.ImageAccessorListener;
+import com.catalyst.catalyst.listener.ServiceListener;
 import com.catalyst.catalyst.util.Constant;
 
-import java.io.InputStream;
-import java.net.URL;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Random;
 
 /**
  * Created by nickpiscopio on 8/18/15.
  */
-public class ImageAccessor extends AsyncTask<String, Void, Bitmap>
+public class ImageAccessor implements ServiceListener, ImageAccessorListener
 {
-    ImageRetrievalListener imageRetrievalListener;
+    private ImageAccessorListener imageAccessorListener;
 
-    public ImageAccessor(ImageRetrievalListener imageRetrievalListener)
+    private static final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&q=scenery&safesearch=true&editors_choice=true";
+
+    public ImageAccessor(ImageAccessorListener imageAccessorListener)
     {
-        this.imageRetrievalListener = imageRetrievalListener;
+        this.imageAccessorListener = imageAccessorListener;
+
+        callApiEndpoint();
     }
 
-    /**
-     * Creates a Bitmap of the image from the URL being sent in
-     *
-     * @param params	The URL String.
-     */
     @Override
-    protected Bitmap doInBackground(String... params)
+    public void onRetrievalSuccessfully(JSONObject json)
     {
-        // //Create an Image from the link provided.
-        Bitmap image = null;
+        Log.i(Constant.TAG, "Found image");
 
         try
         {
-            // Get the URL from the params
-            InputStream inputStream = new URL(params[0]).openStream();
-            image = BitmapFactory.decodeStream(inputStream);
-        }
-        catch(Exception exception)
-        {
-            Log.e(Constant.TAG, exception.toString());
-        }
+            JSONArray jsonArray = json.getJSONArray("hits");
 
-        return image;
+            int jsonLength = jsonArray.length();
+            int randomImage = new Random().nextInt(jsonLength);
+
+            JSONObject childJSONObject = jsonArray.getJSONObject(randomImage);
+            String link = childJSONObject.getString("webformatURL");
+
+
+//            String link = json.getString("url");
+
+            new ImageAccessorTask(this).execute(link);
+        }
+        catch(JSONException exception)
+        {
+            Log.e(Constant.TAG, "Could not find link: " + exception.toString());
+        }
+    }
+
+    @Override
+    public void onRetrievalFailed()
+    {
+        callApiEndpoint();
+    }
+
+    @Override
+    public void onImageRetrieved(Bitmap image)
+    {
+        imageAccessorListener.onImageRetrieved(image);
     }
 
     /**
-     * Called after the image has been retrieved from the URL.
-     *
-     * @param image	The image that is being set in the ImageView.
+     * Calls the API endpoint to get new images.
      */
-    @Override
-    protected void onPostExecute(Bitmap image)
+    private void callApiEndpoint()
     {
-        super.onPostExecute(image);
+        //        new FlickrTask(this).execute("https://api.flickr.com/services/feeds/photos_public.gne?tags=scenery&format=json");
 
-        imageRetrievalListener.onImageRetrieved(image);
+        //        new FlickrTask(this).execute("http://www.splashbase.co/api/v1/images/random");
+
+        new JsonAccessor(this).execute(API_ENDPOINT);
     }
 }

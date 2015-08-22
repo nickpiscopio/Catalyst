@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
  *
  * Created by Nick Piscopio on 6/6/15.
  */
-public interface ImageRetrievalListener
+public interface ImageAccessorListener
 {
     void onImageRetrieved(Bitmap image);
 }

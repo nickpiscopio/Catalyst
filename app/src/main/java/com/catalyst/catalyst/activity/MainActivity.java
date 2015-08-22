@@ -8,27 +8,24 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.alarm.CatalystAlarm;
-import com.catalyst.catalyst.datatransfer.ImageRetriever;
+import com.catalyst.catalyst.datatransfer.ImageAccessor;
 import com.catalyst.catalyst.datatransfer.InspirationRetrievalTask;
 import com.catalyst.catalyst.datatransfer.UpdateInspirationsTask;
-import com.catalyst.catalyst.listener.ImageRetrievalListener;
+import com.catalyst.catalyst.listener.ImageAccessorListener;
 import com.catalyst.catalyst.listener.TaskListener;
 import com.catalyst.catalyst.util.ColorUtil;
 import com.catalyst.catalyst.util.Constant;
@@ -39,7 +36,7 @@ import com.catalyst.catalyst.util.ScreenshotUtil;
  *
  * Created by Nick Piscopio on 5/8/15.
  */
-public class MainActivity extends AppCompatActivity implements TaskListener, ImageRetrievalListener
+public class MainActivity extends AppCompatActivity implements TaskListener, ImageAccessorListener
 {
     public static final String NEW_INSPIRATION = "new.inspiration";
     private static final String INSPIRATION_ID = "com.catalyst.catalyst.inspiration.id";
@@ -50,7 +47,9 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     private Resources res;
     private Context context;
 
-    private LinearLayout layoutInspiration;
+    private ImageView inspirationImage;
+
+    private RelativeLayout layoutInspiration;
 
     private TextView inspiration;
     private TextView author;
@@ -71,7 +70,9 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
 
         context = getApplicationContext();
 
-        layoutInspiration = (LinearLayout) findViewById(R.id.layout_inspiration);
+        inspirationImage = (ImageView) findViewById(R.id.image_inspiration);
+
+        layoutInspiration = (RelativeLayout) findViewById(R.id.layout_inspiration);
 
         if (!isDemoFinished)
         {
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
      */
     private void setActivityColor(boolean transition)
     {
-        new ImageRetriever(this);
+        new ImageAccessor(this);
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
-        View actionBarBackground = findViewById(R.id.view_action_bar_background);
+//        View actionBarBackground = findViewById(R.id.view_action_bar_background);
 
         int storedColorResource = ColorUtil.getStoredColor(context);
 
@@ -230,26 +231,26 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         {
             int fadeDuration = 1700;
             int color = Color.TRANSPARENT;
-            Drawable background = actionBarBackground.getBackground();
-            if (background instanceof ColorDrawable)
-            {
-                color = ((ColorDrawable)background).getColor();
-            }
-
-            ObjectAnimator colorFade = ObjectAnimator.ofObject(actionBarBackground, "backgroundColor", new ArgbEvaluator(),
-                                                               color, storedColorResource);
+//            Drawable background = actionBarBackground.getBackground();
+//            if (background instanceof ColorDrawable)
+//            {
+//                color = ((ColorDrawable)background).getColor();
+//            }
+//
+//            ObjectAnimator colorFade = ObjectAnimator.ofObject(actionBarBackground, "backgroundColor", new ArgbEvaluator(),
+//                                                               color, storedColorResource);
 
             ObjectAnimator colorFade2 = ObjectAnimator.ofObject(layoutInspiration, "backgroundColor", new ArgbEvaluator(),
                                                                color, storedColorResource);
-            colorFade.setDuration(fadeDuration);
+//            colorFade.setDuration(fadeDuration);
             colorFade2.setDuration(fadeDuration);
 
-            colorFade.start();
+//            colorFade.start();
             colorFade2.start();
         }
         else
         {
-            actionBarBackground.setBackgroundColor(storedColorResource);
+//            actionBarBackground.setBackgroundColor(storedColorResource);
             layoutInspiration.setBackgroundColor(storedColorResource);
         }
     }
@@ -257,8 +258,12 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     @Override
     public void onImageRetrieved(Bitmap image)
     {
-        BitmapDrawable backgroundDrawable = new BitmapDrawable(getResources(), image);
-        backgroundDrawable.setGravity(Gravity.CENTER); // also LEFT, CENTER_VERTICAL, etc.
-        layoutInspiration.setBackground(backgroundDrawable);
+//        BitmapDrawable backgroundDrawable = new BitmapDrawable(getResources(), image);
+
+        inspirationImage.setImageBitmap(image);
+        inspirationImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //        layoutInspiration.setBackground(backgroundDrawable);
+//        backgroundDrawable.setGravity(Gravity.FILL | Gravity.CLIP_HORIZONTAL);
+
     }
 }
