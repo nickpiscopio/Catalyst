@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     {
         Intent intent = null;
 
+        int result = 0;
+
         switch (item.getItemId())
         {
             case R.id.action_about:
@@ -140,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
                 intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/png");
                 intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+
+                result = Constant.ACTIVITY_RESULT_SHARE_INSPIRATION;
                 break;
             default:
                 break;
@@ -147,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
 
         if (intent != null)
         {
-            startActivityForResult(intent, Constant.ACTIVITY_RESULT_SHARE_INSPIRATION);
+            startActivityForResult(intent, result);
         }
 
         return super.onOptionsItemSelected(item);

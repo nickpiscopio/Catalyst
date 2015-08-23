@@ -12,6 +12,7 @@
     <string name="title_daily_inspiration">Daily Inspiration</string>
     <string name="title_share">Share</string>
     <string name="title_created_by">Created by</string>
+    <string name="title_version">Version</string>
 
     <string name="description_app">An app designed to influence and inspire people in a positive manner.</string>
     <string name="description_daily_inspiration">Get inspired daily, weekly, or whenever you may need it!</string>

@@ -20,7 +20,7 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
 {
     private ImageAccessorListener imageAccessorListener;
 
-    private static final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&q=scenery&safesearch=true&editors_choice=true";
+    private static final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&q=nude&safesearch=true&editors_choice=true&response_group=high_resolution&image_type=photo";
 
     public ImageAccessor(ImageAccessorListener imageAccessorListener)
     {
@@ -42,7 +42,7 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
             int randomImage = new Random().nextInt(jsonLength);
 
             JSONObject childJSONObject = jsonArray.getJSONObject(randomImage);
-            String link = childJSONObject.getString("webformatURL");
+            String link = childJSONObject.getString("fullHDURL");
 
 
 //            String link = json.getString("url");

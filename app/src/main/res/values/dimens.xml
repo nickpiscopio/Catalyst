@@ -8,7 +8,7 @@
 
     <dimen name="demo_image_logo_margin">25dp</dimen>
     <dimen name="demo_image_margin">15dp</dimen>
-    <dimen name="about_description_margin">5dp</dimen>
+    <dimen name="about_description_margin">2dp</dimen>
     <dimen name="pager_margin">5dp</dimen>
 
     <dimen name="demo_image_height">150dp</dimen>
