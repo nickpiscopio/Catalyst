@@ -3,13 +3,11 @@ package com.catalyst.catalyst.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.catalyst.catalyst.R;
@@ -22,7 +20,7 @@ import com.catalyst.catalyst.util.Constant;
  *
  * Created by Nick Piscopio on 5/8/15.
  */
-public class DemoActivity extends AppCompatActivity
+public class DemoActivity extends FragmentActivity
 {
     private static final int PAGER_SELECTED_RESOURCE = R.mipmap.pager_selected;
     private static final int PAGER_UNSELECTED_RESOURCE = R.mipmap.pager_unselected;
@@ -35,21 +33,13 @@ public class DemoActivity extends AppCompatActivity
     private ImageView pager1;
     private ImageView pager2;
 
-    private Menu menu;
+    private ImageButton next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
-
-        ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null)
-        {
-            actionBar.setBackgroundDrawable(
-                    new ColorDrawable(getResources().getColor(R.color.light_blue)));
-        }
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager)findViewById(R.id.pager);
@@ -61,6 +51,9 @@ public class DemoActivity extends AppCompatActivity
         pager0 = (ImageView)findViewById(R.id.pager_0);
         pager1 = (ImageView)findViewById(R.id.pager_1);
         pager2 = (ImageView)findViewById(R.id.pager_2);
+
+        next = (ImageButton)findViewById(R.id.button_next);
+        next.setOnClickListener(nextListener);
     }
 
     @Override
@@ -77,46 +70,6 @@ public class DemoActivity extends AppCompatActivity
             // Otherwise, select the previous step.
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        this.menu = menu;
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_demo, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_skip)
-        {
-            SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFERENCES, Context.MODE_PRIVATE);
-
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(Constant.DEMO_FINISHED, true);
-            editor.putInt(Constant.INSPIRATION_COLOR, ColorUtil.getRandomNumber(Constant.INSPIRATION_COLOR_MIN, Constant.INSPIRATION_COLOR_MAX));
-            editor.apply();
-
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(MainActivity.NEW_INSPIRATION, true);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            startActivity(intent);
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener()
@@ -143,9 +96,6 @@ public class DemoActivity extends AppCompatActivity
                     pager0.setImageResource(PAGER_UNSELECTED_RESOURCE);
                     pager1.setImageResource(PAGER_UNSELECTED_RESOURCE);
                     pager2.setImageResource(PAGER_SELECTED_RESOURCE);
-
-                    MenuItem menuItem = menu.findItem(R.id.action_skip);
-                    menuItem.setTitle(getApplicationContext().getResources().getString(R.string.action_done));
                     break;
                 default:
                     break;
@@ -154,5 +104,33 @@ public class DemoActivity extends AppCompatActivity
 
         @Override
         public void onPageScrollStateChanged(int state) { }
+    };
+
+    private View.OnClickListener nextListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View v)
+        {
+            if (mPager.getCurrentItem() == PagerAdapter.NUM_PAGES - 1)
+            {
+                SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(Constant.DEMO_FINISHED, true);
+                editor.putInt(Constant.INSPIRATION_COLOR, ColorUtil.getRandomNumber(Constant.INSPIRATION_COLOR_MIN, Constant.INSPIRATION_COLOR_MAX));
+                editor.apply();
+
+                Intent intent = new Intent(DemoActivity.this, MainActivity.class);
+                intent.putExtra(MainActivity.NEW_INSPIRATION, true);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                startActivity(intent);
+                finish();
+            }
+            else
+            {
+                mPager.setCurrentItem(mPager.getCurrentItem() + 1);
+            }
+        }
     };
 }

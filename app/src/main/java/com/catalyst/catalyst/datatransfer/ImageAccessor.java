@@ -14,13 +14,15 @@ import org.json.JSONObject;
 import java.util.Random;
 
 /**
- * Created by nickpiscopio on 8/18/15.
+ * Parses the response from the API Endpoint.
+ *
+ * Created by Nick Piscopio on 8/18/15.
  */
 public class ImageAccessor implements ServiceListener, ImageAccessorListener
 {
     private ImageAccessorListener imageAccessorListener;
 
-    private static final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&q=nude&safesearch=true&editors_choice=true&response_group=high_resolution&image_type=photo";
+    private static final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&safesearch=true&editors_choice=true&response_group=high_resolution&image_type=photo&per_page=200";
 
     public ImageAccessor(ImageAccessorListener imageAccessorListener)
     {
@@ -32,8 +34,6 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
     @Override
     public void onRetrievalSuccessfully(JSONObject json)
     {
-        Log.i(Constant.TAG, "Found image");
-
         try
         {
             JSONArray jsonArray = json.getJSONArray("hits");
@@ -43,9 +43,6 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
 
             JSONObject childJSONObject = jsonArray.getJSONObject(randomImage);
             String link = childJSONObject.getString("fullHDURL");
-
-
-//            String link = json.getString("url");
 
             new ImageAccessorTask(this).execute(link);
         }
@@ -72,10 +69,6 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
      */
     private void callApiEndpoint()
     {
-        //        new FlickrTask(this).execute("https://api.flickr.com/services/feeds/photos_public.gne?tags=scenery&format=json");
-
-        //        new FlickrTask(this).execute("http://www.splashbase.co/api/v1/images/random");
-
         new JsonAccessor(this).execute(API_ENDPOINT);
     }
 }

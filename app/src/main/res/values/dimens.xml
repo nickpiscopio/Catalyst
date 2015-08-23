@@ -4,10 +4,12 @@
     <dimen name="text_extra_large">42sp</dimen>
     <dimen name="text_large">26sp</dimen>
     <dimen name="text_normal">20sp</dimen>
-    <dimen name="text_small">14sp</dimen>
+    <dimen name="text_medium">16sp</dimen>
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="about_text_normal">18sp</dimen>
 
-    <dimen name="demo_image_logo_margin">25dp</dimen>
-    <dimen name="demo_image_margin">15dp</dimen>
+    <dimen name="demo_image_margin">30dp</dimen>
+    <dimen name="demo_text_margin">5dp</dimen>
     <dimen name="about_description_margin">2dp</dimen>
     <dimen name="pager_margin">5dp</dimen>
 

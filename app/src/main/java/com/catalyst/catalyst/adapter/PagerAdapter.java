@@ -14,7 +14,7 @@ import com.catalyst.catalyst.fragment.DemoPagerFragment;
  */
 public class PagerAdapter extends FragmentStatePagerAdapter
 {
-    private static final int NUM_PAGES = 3;
+    public static final int NUM_PAGES = 3;
 
     public PagerAdapter(FragmentManager fm)
     {
