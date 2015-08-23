@@ -47,6 +47,7 @@ public class TimePreference extends DialogPreference
 
         this.context = ctxt;
 
+        setDialogTitle("");
         setPositiveButtonText(R.string.positive_set);
 
         calendar = new GregorianCalendar();

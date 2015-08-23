@@ -21,11 +21,11 @@
     <!-- Settings -->
     <string name="settings_title">Inspiration Settings</string>
     <string name="settings_notification_title">Notifications</string>
-    <string name="settings_notification_summary">Notify me of new inspirations</string>
+    <string name="settings_notification_summary">Notify me when new inspirations are available</string>
 
-    <string name="settings_interval_title">Interval</string>
+    <string name="settings_interval_title">Notification Interval</string>
 
-    <string name="settings_time_title">Time</string>
+    <string name="settings_time_title">Notification Time</string>
 
     <string name="setting_inspire_sunday">Sunday</string>
     <string name="setting_inspire_monday">Monday</string>
