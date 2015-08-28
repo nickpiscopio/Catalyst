@@ -24,6 +24,12 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
 
     private static final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&safesearch=true&editors_choice=true&response_group=high_resolution&image_type=photo&per_page=200";
 
+    public enum ImageAccessorState
+    {
+        PROCESSING,
+        FINISHED
+    }
+
     public ImageAccessor(ImageAccessorListener imageAccessorListener)
     {
         this.imageAccessorListener = imageAccessorListener;

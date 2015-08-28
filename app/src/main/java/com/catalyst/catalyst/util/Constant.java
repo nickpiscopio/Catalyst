@@ -8,16 +8,11 @@ package com.catalyst.catalyst.util;
 public class Constant
 {
     public static final String TAG = "Catalyst";
-
     public static final String SHARED_PREFERENCES = "com.catalyst.catalyst.shared.preferences";
     public static final String DEMO_FINISHED = "com.catalyst.catalyst.demo.finished";
-
-    public static final String INSPIRATION_COLOR = "com.catalyst.catalyst.inspiration.color";
-
+    public static final String INSPIRATION_BACKGROUND_IMAGE = "com.catalyst.catalyst.inspiration.background.image";
     public static final String TIMEZONE_UTC = "UTC";
 
-    public static final int INSPIRATION_COLOR_MIN = 0;
-    public static final int INSPIRATION_COLOR_MAX = 3;
-
     public static final int ACTIVITY_RESULT_SHARE_INSPIRATION = 1;
+    public static final int PROCESS_FAILED = -1;
 }

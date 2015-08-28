@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.adapter.PagerAdapter;
-import com.catalyst.catalyst.util.ColorUtil;
 import com.catalyst.catalyst.util.Constant;
 
 /**
@@ -117,7 +116,6 @@ public class DemoActivity extends FragmentActivity
 
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(Constant.DEMO_FINISHED, true);
-                editor.putInt(Constant.INSPIRATION_COLOR, ColorUtil.getRandomNumber(Constant.INSPIRATION_COLOR_MIN, Constant.INSPIRATION_COLOR_MAX));
                 editor.apply();
 
                 Intent intent = new Intent(DemoActivity.this, MainActivity.class);

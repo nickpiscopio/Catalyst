@@ -1,18 +1,19 @@
 package com.catalyst.catalyst.activity;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -27,9 +28,10 @@ import com.catalyst.catalyst.datatransfer.InspirationRetrievalTask;
 import com.catalyst.catalyst.datatransfer.UpdateInspirationsTask;
 import com.catalyst.catalyst.listener.ImageAccessorListener;
 import com.catalyst.catalyst.listener.TaskListener;
-import com.catalyst.catalyst.util.ColorUtil;
 import com.catalyst.catalyst.util.Constant;
 import com.catalyst.catalyst.util.ScreenshotUtil;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Main view of Catalyst.
@@ -39,8 +41,9 @@ import com.catalyst.catalyst.util.ScreenshotUtil;
 public class MainActivity extends AppCompatActivity implements TaskListener, ImageAccessorListener
 {
     public static final String NEW_INSPIRATION = "new.inspiration";
-    private static final String INSPIRATION_ID = "com.catalyst.catalyst.inspiration.id";
-    private static final String INSPIRATION_AUTHOR = "com.catalyst.catalyst.inspiration.author";
+    private final String INSPIRATION_ID = "com.catalyst.catalyst.inspiration.id";
+    private final String INSPIRATION_AUTHOR = "com.catalyst.catalyst.inspiration.author";
+    private final String IMAGE_ACCESSOR_STATE = "com.catalyst.catalyst.image.accessor.state";
 
     private SharedPreferences prefs;
 
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     private TextView author;
 
     private Uri screenshotUri;
+
+    private ImageAccessor.ImageAccessorState imageAccessorState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -103,7 +108,12 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         inspiration = (TextView) findViewById(R.id.text_inspiration);
         author = (TextView) findViewById(R.id.text_author);
 
-        setActivityColor(false);
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null)
+        {
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
 
         new UpdateInspirationsTask(context, this).execute();
     }
@@ -158,6 +168,40 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        super.onSaveInstanceState(savedInstanceState);
+
+        if (imageAccessorState != null)
+        {
+            savedInstanceState.putInt(IMAGE_ACCESSOR_STATE, imageAccessorState.ordinal());
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        int imageState = savedInstanceState.getInt(IMAGE_ACCESSOR_STATE, Constant.PROCESS_FAILED);
+
+        if (imageState > Constant.PROCESS_FAILED)
+        {
+            switch (imageState)
+            {
+                case 0:
+                    imageAccessorState = ImageAccessor.ImageAccessorState.PROCESSING;
+                    break;
+                case 1:
+                    imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
@@ -187,23 +231,27 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
             {
                 //Get an inspiration
                 new InspirationRetrievalTask(context, this).execute();
+
+                imageAccessorState = ImageAccessor.ImageAccessorState.PROCESSING;
+
+                //Get a background image
+                new ImageAccessor(this);
             }
             else
             {
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(MainActivity.INSPIRATION_ID, result[0]);
-                editor.putString(MainActivity.INSPIRATION_AUTHOR, result[1]);
-                editor.putInt(Constant.INSPIRATION_COLOR, ColorUtil.getRandomNumber(Constant.INSPIRATION_COLOR_MIN, Constant.INSPIRATION_COLOR_MAX));
+                editor.putString(INSPIRATION_ID, result[0]);
+                editor.putString(INSPIRATION_AUTHOR, result[1]);
                 editor.apply();
-
-                setActivityColor(true);
 
                 intent.putExtra(NEW_INSPIRATION, false);
             }
         }
 
-        String storedId = prefs.getString(MainActivity.INSPIRATION_ID, "");
-        String storedAuthor = "—" + prefs.getString(MainActivity.INSPIRATION_AUTHOR, "");
+        getStoredImage();
+
+        String storedId = prefs.getString(INSPIRATION_ID, "");
+        String storedAuthor = "—" + prefs.getString(INSPIRATION_AUTHOR, "");
 
         int id = storedId.length() > 0 ? res.getIdentifier(storedId, "string", getPackageName()) : R.string.positivity_conquer;
 
@@ -211,63 +259,46 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         author.setText(storedAuthor);
     }
 
-    /**
-     * Sets the background color of the activity.
-     *
-     * @param transition    Boolean value of whether to use a transition or not.
-     */
-    private void setActivityColor(boolean transition)
-    {
-        new ImageAccessor(this);
-
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null)
-        {
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
-
-//        View actionBarBackground = findViewById(R.id.view_action_bar_background);
-
-        int storedColorResource = ColorUtil.getStoredColor(context);
-
-        if (transition)
-        {
-            int fadeDuration = 1700;
-            int color = Color.TRANSPARENT;
-//            Drawable background = actionBarBackground.getBackground();
-//            if (background instanceof ColorDrawable)
-//            {
-//                color = ((ColorDrawable)background).getColor();
-//            }
-//
-//            ObjectAnimator colorFade = ObjectAnimator.ofObject(actionBarBackground, "backgroundColor", new ArgbEvaluator(),
-//                                                               color, storedColorResource);
-
-            ObjectAnimator colorFade2 = ObjectAnimator.ofObject(layoutInspiration, "backgroundColor", new ArgbEvaluator(),
-                                                               color, storedColorResource);
-//            colorFade.setDuration(fadeDuration);
-            colorFade2.setDuration(fadeDuration);
-
-//            colorFade.start();
-            colorFade2.start();
-        }
-        else
-        {
-//            actionBarBackground.setBackgroundColor(storedColorResource);
-            layoutInspiration.setBackgroundColor(storedColorResource);
-        }
-    }
-
     @Override
     public void onImageRetrieved(Bitmap image)
     {
-//        BitmapDrawable backgroundDrawable = new BitmapDrawable(getResources(), image);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
 
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE,
+                         Base64.encodeToString(b, Base64.DEFAULT));
+        editor.apply();
+
+        imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED;
+
+        setBackgroundImage(image);
+    }
+
+    /**
+     * Gets the stored image in the shared preferences.
+     */
+    private void getStoredImage()
+    {
+        String previouslyEncodedImage = prefs.getString(Constant.INSPIRATION_BACKGROUND_IMAGE, "");
+
+        if (imageAccessorState == ImageAccessor.ImageAccessorState.FINISHED || !previouslyEncodedImage.equalsIgnoreCase(""))
+        {
+            byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
+            Bitmap image = BitmapFactory.decodeByteArray(b, 0, b.length);
+            setBackgroundImage(image);
+        }
+    }
+
+    /**
+     * Sets that background image from a bitmap and scales it properly.
+     *
+     * @param image     The bitmap to use for the background.
+     */
+    private void setBackgroundImage(Bitmap image)
+    {
         inspirationImage.setImageBitmap(image);
         inspirationImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        //        layoutInspiration.setBackground(backgroundDrawable);
-//        backgroundDrawable.setGravity(Gravity.FILL | Gravity.CLIP_HORIZONTAL);
-
     }
 }
