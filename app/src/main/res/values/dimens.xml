@@ -1,5 +1,11 @@
 <resources>
     <dimen name="margins">20dp</dimen>
+    <!-- Needs to be margins * 3 + a few extra for the page indicators. -->
+    <dimen name="demo_bottom_margin">65dp</dimen>
+
+    <dimen name="demo_title">36sp</dimen>
+    <dimen name="demo_text_normal">22sp</dimen>
+
     <dimen name="title">28sp</dimen>
     <dimen name="text_extra_large">42sp</dimen>
     <dimen name="text_large">26sp</dimen>
@@ -12,6 +18,7 @@
     <dimen name="demo_text_margin">5dp</dimen>
     <dimen name="about_description_margin">2dp</dimen>
     <dimen name="pager_margin">5dp</dimen>
+    <dimen name="progress_bar_margin">12dp</dimen>
 
     <dimen name="demo_image_height">150dp</dimen>
 </resources>

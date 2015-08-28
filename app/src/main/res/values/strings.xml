@@ -14,9 +14,14 @@
     <string name="title_created_by">Created by</string>
     <string name="title_version">Version</string>
 
+    <string name="image_description">Image by %1$s from Pixabay.com</string>
+    <string name="image_description_no_author">Image from Pixabay.com</string>
+
     <string name="description_app">An app designed to influence and inspire people in a positive manner.</string>
     <string name="description_daily_inspiration">Get inspired daily, weekly, or whenever you may need it!</string>
     <string name="description_share">Share inspirations with friends and family!</string>
+
+    <string name="inspiration_loading">Generating inspirations is hard work. Please wait.</string>
 
     <!-- Settings -->
     <string name="settings_title">Inspiration Settings</string>
@@ -53,22 +58,22 @@
     <string name="positivity_simplify"><b>Simplify</b> life. Take it one step at a time.</string>
     <string name="positivity_believe"><b>Believe</b> in yourself!</string>
     <string name="positivity_exploring">Life is a <i>mystery</i>. Go exploring!</string>
-    <string name="positivity_great_day">Have a <b>great</b> day!</string>
+    <string name="positivity_great_day">Great days are <b>relative</b>. If <i>you</i> believe it to be one, then it is!</string>
     <string name="positivity_favor">Stay <b>positive</b> because everything will work out in your favor.</string>
-    <string name="positivity_conquer"><b>Today</b> is your day; <b>conquer</b> it!</string>
+    <string name="positivity_conquer">This <i>is</i> your life; <b>conquer</b> it!</string>
     <string name="positivity_awesome">You\'re <b>awesome</b>! Don\'t forget it!</string>
     <string name="positivity_exist">You <b>exist</b>. You are a real person, and you <b>matter</b>!</string>
-    <string name="positivity_mirror">Look in the mirror and repeat these words, <b>"I am going to seize this day!"</b></string>
+    <string name="positivity_mirror">Seize every day you can!</string>
     <string name="positivity_focus">Focus on the future because the past <i>is</i> the past, and there is nothing you can do about it now.</string>
     <string name="positivity_live"><b>Live</b> like you mean it!</string>
     <string name="positivity_uno">You <i>are</i> numero <b>uno</b>!</string>
     <string name="positivity_good_time">Have a good time. You <b>deserve</b> it!</string>
     <string name="positivity_world">The world <i>is</i> a little <b>better</b> just because you\'re in it!</string>
-    <string name="positivity_today">Life is a little better just from knowing you!</string>
-    <string name="positivity_make_today_count">Make today <b>count</b> because it won\'t be coming back!</string>
+    <string name="positivity_today">Life <i>is</i> a little better just from knowing you!</string>
+    <string name="positivity_make_today_count">Time <b>never</b> stops, so make every day count!</string>
     <string name="positivity_think_positive">Think <b>positive</b> thoughts!</string>
-    <string name="success_focus_on_work"><b>Focus</b> on the good work you did!</string>
-    <string name="success_great_job">You did a <b>great</b> job!</string>
+    <string name="success_focus_on_work"><b>Focus</b> on the good work you do!</string>
+    <string name="success_great_job">You do a <b>great</b> job!</string>
     <string name="success_proud">Be <b>proud</b> of yourself!</string>
     <string name="success_good_work">You do good work!</string>
     <string name="success_forward">Keep moving <b>forward</b>!</string>

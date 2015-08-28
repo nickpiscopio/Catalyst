@@ -16,8 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,8 +56,12 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
 
     private RelativeLayout layoutInspiration;
 
+    private RelativeLayout layoutInspirationText;
+    private LinearLayout layoutLoading;
+
     private TextView inspiration;
     private TextView author;
+    private TextView imageAuthor;
 
     private Uri screenshotUri;
 
@@ -74,10 +80,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         boolean isDemoFinished = prefs.getBoolean(Constant.DEMO_FINISHED, false);
 
         context = getApplicationContext();
-
-        inspirationImage = (ImageView) findViewById(R.id.image_inspiration);
-
-        layoutInspiration = (RelativeLayout) findViewById(R.id.layout_inspiration);
 
         if (!isDemoFinished)
         {
@@ -105,8 +107,18 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
      */
     private void runCatalyst()
     {
+        layoutInspiration = (RelativeLayout) findViewById(R.id.layout_inspiration);
+        layoutInspirationText = (RelativeLayout) findViewById(R.id.layout_inspiration_text);
+
+        inspirationImage = (ImageView) findViewById(R.id.image_inspiration);
+
         inspiration = (TextView) findViewById(R.id.text_inspiration);
         author = (TextView) findViewById(R.id.text_author);
+        imageAuthor = (TextView) findViewById(R.id.text_image_author);
+
+        layoutLoading = (LinearLayout) findViewById(R.id.layout_inspiration_loading);
+
+        setLoading(true);
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -206,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Constant.ACTIVITY_RESULT_SHARE_INSPIRATION)
+        if (requestCode == Constant.ACTIVITY_RESULT_SHARE_INSPIRATION && resultCode == RESULT_OK)
         {
             // Delete the image from the device after sharing.
             getContentResolver().delete(screenshotUri, null, null);
@@ -227,8 +239,14 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         //If get new inspiration
         if (intent.getBooleanExtra(NEW_INSPIRATION, false))
         {
+            SharedPreferences.Editor editor = prefs.edit();
+
             if (result.length == 0)
             {
+                editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE, "");
+                editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE_AUTHOR, "");
+                editor.apply();
+
                 //Get an inspiration
                 new InspirationRetrievalTask(context, this).execute();
 
@@ -239,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
             }
             else
             {
-                SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(INSPIRATION_ID, result[0]);
                 editor.putString(INSPIRATION_AUTHOR, result[1]);
                 editor.apply();
@@ -260,20 +277,23 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     }
 
     @Override
-    public void onImageRetrieved(Bitmap image)
+    public void onImageRetrieved(Bitmap image) { }
+
+    @Override
+    public void onImageRetrieved(Bitmap image, String author)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] b = baos.toByteArray();
 
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE,
-                         Base64.encodeToString(b, Base64.DEFAULT));
+        editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE, Base64.encodeToString(b, Base64.DEFAULT));
+        editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE_AUTHOR, author);
         editor.apply();
 
         imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED;
 
-        setBackgroundImage(image);
+        setBackgroundImage(image, author);
     }
 
     /**
@@ -281,13 +301,18 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
      */
     private void getStoredImage()
     {
-        String previouslyEncodedImage = prefs.getString(Constant.INSPIRATION_BACKGROUND_IMAGE, "");
+        String encodedImage = prefs.getString(Constant.INSPIRATION_BACKGROUND_IMAGE, "");
+        String imageAuthor = prefs.getString(Constant.INSPIRATION_BACKGROUND_IMAGE_AUTHOR, "");
 
-        if (imageAccessorState == ImageAccessor.ImageAccessorState.FINISHED || !previouslyEncodedImage.equalsIgnoreCase(""))
+        if (imageAccessorState == ImageAccessor.ImageAccessorState.FINISHED || !encodedImage.equalsIgnoreCase(""))
         {
-            byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
+            byte[] b = Base64.decode(encodedImage, Base64.DEFAULT);
             Bitmap image = BitmapFactory.decodeByteArray(b, 0, b.length);
-            setBackgroundImage(image);
+            setBackgroundImage(image, imageAuthor);
+        }
+        else
+        {
+            setLoading(true);
         }
     }
 
@@ -296,9 +321,34 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
      *
      * @param image     The bitmap to use for the background.
      */
-    private void setBackgroundImage(Bitmap image)
+    private void setBackgroundImage(Bitmap image, String author)
     {
+        setLoading(false);
+
         inspirationImage.setImageBitmap(image);
         inspirationImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        imageAuthor.setText(
+                author.length() > 0 ? res.getString(R.string.image_description, author) :
+                        res.getString(R.string.image_description_no_author));
+    }
+
+    /**
+     * Sets the UI according to whether it is loading or not.
+     *
+     * @param isLoading     Boolean value of which layout to show.
+     */
+    private void setLoading(boolean isLoading)
+    {
+        if (isLoading)
+        {
+            layoutInspirationText.setVisibility(View.GONE);
+            layoutLoading.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            layoutLoading.setVisibility(View.GONE);
+            layoutInspirationText.setVisibility(View.VISIBLE);
+        }
     }
 }

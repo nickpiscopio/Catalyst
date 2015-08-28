@@ -17,10 +17,10 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/layout_inspiration_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:padding="@dimen/margins"
             android:orientation="vertical">
@@ -30,19 +30,56 @@
                 android:id="@+id/text_inspiration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:gravity="center"
                 android:textSize="@dimen/title"/>
 
             <TextView
                 style="@style/text_author"
                 android:id="@+id/text_author"
+                android:layout_below="@id/text_inspiration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/about_description_margin"
-                android:layout_gravity="end"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:textSize="@dimen/text_normal"/>
 
-            </LinearLayout>
+            <TextView
+                style="@style/text_author"
+                android:id="@+id/text_image_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/about_description_margin"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:textSize="@dimen/text_small"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_inspiration_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:padding="@dimen/margins"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:layout_marginRight="@dimen/progress_bar_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                style="@style/text_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/inspiration_loading"
+                android:textSize="@dimen/text_normal"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -20,9 +20,11 @@ import java.util.Random;
  */
 public class ImageAccessor implements ServiceListener, ImageAccessorListener
 {
-    private ImageAccessorListener imageAccessorListener;
+    private final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&safesearch=true&editors_choice=true&response_group=high_resolution&image_type=photo&order=latest&per_page=200";
 
-    private static final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&safesearch=true&editors_choice=true&response_group=high_resolution&image_type=photo&per_page=200";
+    private String author;
+
+    private ImageAccessorListener imageAccessorListener;
 
     public enum ImageAccessorState
     {
@@ -50,6 +52,8 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
             JSONObject childJSONObject = jsonArray.getJSONObject(randomImage);
             String link = childJSONObject.getString("fullHDURL");
 
+            author = childJSONObject.getString("user");
+
             new ImageAccessorTask(this).execute(link);
         }
         catch(JSONException exception)
@@ -67,8 +71,11 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
     @Override
     public void onImageRetrieved(Bitmap image)
     {
-        imageAccessorListener.onImageRetrieved(image);
+        imageAccessorListener.onImageRetrieved(image, author);
     }
+
+    @Override
+    public void onImageRetrieved(Bitmap image, String author) { }
 
     /**
      * Calls the API endpoint to get new images.

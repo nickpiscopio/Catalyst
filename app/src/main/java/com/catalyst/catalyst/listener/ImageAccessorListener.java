@@ -10,4 +10,6 @@ import android.graphics.Bitmap;
 public interface ImageAccessorListener
 {
     void onImageRetrieved(Bitmap image);
+
+    void onImageRetrieved(Bitmap image, String author);
 }

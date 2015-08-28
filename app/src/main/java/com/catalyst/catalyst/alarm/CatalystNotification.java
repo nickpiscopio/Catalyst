@@ -18,7 +18,7 @@ import com.catalyst.catalyst.activity.MainActivity;
  */
 public class CatalystNotification extends BroadcastReceiver
 {
-    private static final int NOTIFICATION_ID = 1;
+    private final int NOTIFICATION_ID = 1;
 
     @Override
     public void onReceive(Context context, Intent intent)
