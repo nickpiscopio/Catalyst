@@ -1,12 +1,10 @@
 package com.catalyst.catalyst.helper;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.catalyst.catalyst.entity.Record;
-import com.catalyst.catalyst.util.Constant;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,7 +17,7 @@ import java.util.Calendar;
 public class DbHelper extends SQLiteOpenHelper
 {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Catalyst.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -53,13 +51,9 @@ public class DbHelper extends SQLiteOpenHelper
                                                  InspirationTable.COLUMN_NAME_DATE_DISPLAYED + " < " +
                                                  String.valueOf(ELIGIBLE_INSPIRATION_DATE) + " ORDER BY RANDOM() LIMIT 1";
 
-    private Context context;
-
     public DbHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
-        this.context = context;
     }
 
     public void onCreate(SQLiteDatabase db)
@@ -67,12 +61,11 @@ public class DbHelper extends SQLiteOpenHelper
         db.execSQL(SQL_CREATE_ENTRIES);
     }
 
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-    {
-        SharedPreferences prefs = context.getSharedPreferences(Constant.SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
-        editor.apply();
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // This database is only a cache for online data, so its upgrade policy is
+        // to simply to discard the data and start over
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
