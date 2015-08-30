@@ -116,10 +116,10 @@ public class DemoActivity extends FragmentActivity
 
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(Constant.DEMO_FINISHED, true);
+                editor.putBoolean(Constant.NEW_INSPIRATION, true);
                 editor.apply();
 
                 Intent intent = new Intent(DemoActivity.this, MainActivity.class);
-                intent.putExtra(MainActivity.NEW_INSPIRATION, true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                 startActivity(intent);

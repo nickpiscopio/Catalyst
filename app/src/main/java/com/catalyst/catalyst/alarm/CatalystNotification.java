@@ -6,10 +6,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.activity.MainActivity;
+import com.catalyst.catalyst.util.Constant;
 
 /**
  * Notification manager for Catalyst.
@@ -18,15 +20,20 @@ import com.catalyst.catalyst.activity.MainActivity;
  */
 public class CatalystNotification extends BroadcastReceiver
 {
-    private final int NOTIFICATION_ID = 1;
+    public static final int NOTIFICATION_ID = 1;
 
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        SharedPreferences prefs = context.getSharedPreferences(Constant.SHARED_PREFERENCES,
+                                                               Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(Constant.NEW_INSPIRATION, true);
+        editor.apply();
+
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         Intent mainActivityIntent = new Intent(context, MainActivity.class);
-        mainActivityIntent.putExtra(MainActivity.NEW_INSPIRATION, true);
         mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, mainActivityIntent,

@@ -1,6 +1,6 @@
 package com.catalyst.catalyst.listener;
 
-import android.graphics.Bitmap;
+import com.catalyst.catalyst.entity.CatalystBitmap;
 
 /**
  * Public interface to listen for when an image is retrieved.
@@ -9,7 +9,5 @@ import android.graphics.Bitmap;
  */
 public interface ImageAccessorListener
 {
-    void onImageRetrieved(Bitmap image);
-
-    void onImageRetrieved(Bitmap image, String author);
+    void onImageRetrieved(CatalystBitmap catalystBitmap);
 }

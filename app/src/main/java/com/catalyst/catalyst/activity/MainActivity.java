@@ -1,5 +1,7 @@
 package com.catalyst.catalyst.activity;
 
+import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +12,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -19,30 +20,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.catalyst.catalyst.R;
 import com.catalyst.catalyst.alarm.CatalystAlarm;
+import com.catalyst.catalyst.alarm.CatalystNotification;
 import com.catalyst.catalyst.datatransfer.ImageAccessor;
-import com.catalyst.catalyst.datatransfer.InspirationRetrievalTask;
-import com.catalyst.catalyst.datatransfer.UpdateInspirationsTask;
+import com.catalyst.catalyst.datatransfer.task.InspirationRetrievalTask;
+import com.catalyst.catalyst.datatransfer.task.UpdateInspirationsTask;
+import com.catalyst.catalyst.entity.CatalystBitmap;
 import com.catalyst.catalyst.listener.ImageAccessorListener;
+import com.catalyst.catalyst.listener.ShareListener;
 import com.catalyst.catalyst.listener.TaskListener;
+import com.catalyst.catalyst.datatransfer.task.ShareTask;
 import com.catalyst.catalyst.util.Constant;
-import com.catalyst.catalyst.util.ScreenshotUtil;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 /**
  * Main view of Catalyst.
  *
  * Created by Nick Piscopio on 5/8/15.
  */
-public class MainActivity extends AppCompatActivity implements TaskListener, ImageAccessorListener
+public class MainActivity extends AppCompatActivity implements TaskListener, ImageAccessorListener,
+                                                               ShareListener
 {
-    public static final String NEW_INSPIRATION = "new.inspiration";
     private final String INSPIRATION_ID = "com.catalyst.catalyst.inspiration.id";
     private final String INSPIRATION_AUTHOR = "com.catalyst.catalyst.inspiration.author";
     private final String IMAGE_ACCESSOR_STATE = "com.catalyst.catalyst.image.accessor.state";
@@ -57,15 +60,14 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     private RelativeLayout layoutInspiration;
 
     private RelativeLayout layoutInspirationText;
-    private LinearLayout layoutLoading;
 
     private TextView inspiration;
     private TextView author;
     private TextView imageAuthor;
 
-    private Uri screenshotUri;
-
     private ImageAccessor.ImageAccessorState imageAccessorState;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -116,8 +118,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         author = (TextView) findViewById(R.id.text_author);
         imageAuthor = (TextView) findViewById(R.id.text_image_author);
 
-        layoutLoading = (LinearLayout) findViewById(R.id.layout_inspiration_loading);
-
         setLoading(true);
 
         ActionBar actionBar = getSupportActionBar();
@@ -143,8 +143,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     {
         Intent intent = null;
 
-        int result = 0;
-
         switch (item.getItemId())
         {
             case R.id.action_about:
@@ -154,18 +152,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
                 intent = new Intent(this, SettingsActivity.class);
                 break;
             case R.id.action_share:
-                ScreenshotUtil ssUtil = new ScreenshotUtil();
-                Bitmap screenshot = ssUtil.takeScreenShot(layoutInspiration);
-
-                String path = MediaStore.Images.Media
-                        .insertImage(getContentResolver(), screenshot, "title", null);
-                screenshotUri = Uri.parse(path);
-
-                intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("image/png");
-                intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-
-                result = Constant.ACTIVITY_RESULT_SHARE_INSPIRATION;
+                showProgressDialog(res.getString(R.string.share_processing));
+                new ShareTask(this).execute(layoutInspiration);
                 break;
             default:
                 break;
@@ -173,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
 
         if (intent != null)
         {
-            startActivityForResult(intent, result);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -213,18 +201,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Constant.ACTIVITY_RESULT_SHARE_INSPIRATION && resultCode == RESULT_OK)
-        {
-            // Delete the image from the device after sharing.
-            getContentResolver().delete(screenshotUri, null, null);
-        }
-    }
-
     /**
      * Listener called when the DatabaseTask finishes processing.
      */
@@ -234,11 +210,14 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         // Creates the alarm to start sending notifications to the user.
         CatalystAlarm.getInstance(context);
 
-        Intent intent = getIntent();
-
-        //If get new inspiration
-        if (intent.getBooleanExtra(NEW_INSPIRATION, false))
+        // If get new inspiration
+        if (prefs.getBoolean(Constant.NEW_INSPIRATION, false))
         {
+            // Cancels the notification if the user opens up the app without clicking on the notification.
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+                    Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(CatalystNotification.NOTIFICATION_ID);
+
             SharedPreferences.Editor editor = prefs.edit();
 
             if (result.length == 0)
@@ -259,9 +238,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
             {
                 editor.putString(INSPIRATION_ID, result[0]);
                 editor.putString(INSPIRATION_AUTHOR, result[1]);
+                editor.putBoolean(Constant.NEW_INSPIRATION, false);
                 editor.apply();
-
-                intent.putExtra(NEW_INSPIRATION, false);
             }
         }
 
@@ -277,23 +255,30 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     }
 
     @Override
-    public void onImageRetrieved(Bitmap image) { }
-
-    @Override
-    public void onImageRetrieved(Bitmap image, String author)
+    public void onImageRetrieved(CatalystBitmap catalystBitmap)
     {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
+        String author = catalystBitmap.getAuthor();
 
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE, Base64.encodeToString(b, Base64.DEFAULT));
+        editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE, Base64.encodeToString(catalystBitmap.getEncodedBitmap(), Base64.DEFAULT));
         editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE_AUTHOR, author);
         editor.apply();
 
         imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED;
 
-        setBackgroundImage(image, author);
+        setBackgroundImage(catalystBitmap.getBitmap(), author);
+    }
+
+    @Override
+    public void onImageProcessed(File path)
+    {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(Constant.IMAGE_TYPE);
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(path));
+
+        startActivity(intent);
+
+        progressDialog.dismiss();
     }
 
     /**
@@ -323,14 +308,19 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
      */
     private void setBackgroundImage(Bitmap image, String author)
     {
-        setLoading(false);
-
         inspirationImage.setImageBitmap(image);
         inspirationImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         imageAuthor.setText(
                 author.length() > 0 ? res.getString(R.string.image_description, author) :
                         res.getString(R.string.image_description_no_author));
+
+        setLoading(false);
+    }
+
+    private void showProgressDialog(String message)
+    {
+        progressDialog = ProgressDialog.show(this, null, message, false);
     }
 
     /**
@@ -343,12 +333,21 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         if (isLoading)
         {
             layoutInspirationText.setVisibility(View.GONE);
-            layoutLoading.setVisibility(View.VISIBLE);
+
+            if (progressDialog == null)
+            {
+                showProgressDialog(res.getString(R.string.inspiration_loading));
+            }
         }
         else
         {
-            layoutLoading.setVisibility(View.GONE);
             layoutInspirationText.setVisibility(View.VISIBLE);
+
+            if (progressDialog != null)
+            {
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
         }
     }
 }

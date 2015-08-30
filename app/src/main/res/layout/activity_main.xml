@@ -58,29 +58,6 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_inspiration_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:padding="@dimen/margins"
-            android:orientation="horizontal">
-
-            <ProgressBar
-                android:layout_marginRight="@dimen/progress_bar_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                style="@style/text_loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/inspiration_loading"
-                android:textSize="@dimen/text_normal"/>
-
-        </LinearLayout>
-
     </RelativeLayout>
 
 </LinearLayout>

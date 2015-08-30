@@ -1,4 +1,4 @@
-package com.catalyst.catalyst.datatransfer;
+package com.catalyst.catalyst.datatransfer.task;
 
 import android.content.ContentValues;
 import android.content.Context;

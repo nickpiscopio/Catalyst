@@ -1,7 +1,11 @@
 package com.catalyst.catalyst.util;
 
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.view.View;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  *  Utility class for screenshots.
@@ -31,5 +35,46 @@ public class ScreenshotUtil
         view.destroyDrawingCache();
 
         return b;
+    }
+
+    /**
+     * Saves an image to the public picture directory in android.
+     *
+     * @param bitmap    The image to save.
+     *
+     * @param name      The name to save it. This will be saved as a PNG.
+     *
+     * @return  File that was saved.
+     */
+    public File saveImage(Bitmap bitmap, String name)
+    {
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + Constant.TAG);
+
+        if(!dir.exists())
+        {
+            dir.mkdirs();
+        }
+
+        String fileName = name + ".png";
+
+        File file = new File(dir, fileName);
+        if (file.exists())
+        {
+            file.delete();
+        }
+
+        try
+        {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return file;
     }
 }

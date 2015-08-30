@@ -22,6 +22,7 @@
     <string name="description_share">Share inspirations with friends and family!</string>
 
     <string name="inspiration_loading">Generating inspirations is hard work. Please wait.</string>
+    <string name="share_processing">Sharing inspirations is hard work. Please wait.</string>
 
     <!-- Settings -->
     <string name="settings_title">Inspiration Settings</string>

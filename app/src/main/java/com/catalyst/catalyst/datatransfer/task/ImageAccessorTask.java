@@ -1,10 +1,11 @@
-package com.catalyst.catalyst.datatransfer;
+package com.catalyst.catalyst.datatransfer.task;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.catalyst.catalyst.entity.CatalystBitmap;
 import com.catalyst.catalyst.listener.ImageAccessorListener;
 import com.catalyst.catalyst.util.Constant;
 
@@ -12,9 +13,11 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * Created by nickpiscopio on 8/18/15.
+ * Gets an image from a URL and creates a CatalystBitmap from it.
+ *
+ * Created by Nick Piscopio on 8/18/15.
  */
-public class ImageAccessorTask extends AsyncTask<String, Void, Bitmap>
+public class ImageAccessorTask extends AsyncTask<String, Void, CatalystBitmap>
 {
     ImageAccessorListener imageAccessorListener;
 
@@ -29,7 +32,7 @@ public class ImageAccessorTask extends AsyncTask<String, Void, Bitmap>
      * @param params	The URL String.
      */
     @Override
-    protected Bitmap doInBackground(String... params)
+    protected CatalystBitmap doInBackground(String... params)
     {
         // //Create an Image from the link provided.
         Bitmap image = null;
@@ -45,16 +48,16 @@ public class ImageAccessorTask extends AsyncTask<String, Void, Bitmap>
             Log.e(Constant.TAG, exception.toString());
         }
 
-        return image;
+        return new CatalystBitmap(image);
     }
 
     /**
      * Called after the image has been retrieved from the URL.
      *
-     * @param image	The image that is being set in the ImageView.
+     * @param image	    The CatalystBitmap that is being set to the listener.
      */
     @Override
-    protected void onPostExecute(Bitmap image)
+    protected void onPostExecute(CatalystBitmap image)
     {
         super.onPostExecute(image);
 

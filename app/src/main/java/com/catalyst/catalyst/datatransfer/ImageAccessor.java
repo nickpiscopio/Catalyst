@@ -1,8 +1,9 @@
 package com.catalyst.catalyst.datatransfer;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.catalyst.catalyst.datatransfer.task.ImageAccessorTask;
+import com.catalyst.catalyst.entity.CatalystBitmap;
 import com.catalyst.catalyst.listener.ImageAccessorListener;
 import com.catalyst.catalyst.listener.ServiceListener;
 import com.catalyst.catalyst.util.Constant;
@@ -69,13 +70,12 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
     }
 
     @Override
-    public void onImageRetrieved(Bitmap image)
+    public void onImageRetrieved(CatalystBitmap catalystBitmap)
     {
-        imageAccessorListener.onImageRetrieved(image, author);
-    }
+        catalystBitmap.setAuthor(author);
 
-    @Override
-    public void onImageRetrieved(Bitmap image, String author) { }
+        imageAccessorListener.onImageRetrieved(catalystBitmap);
+    }
 
     /**
      * Calls the API endpoint to get new images.
