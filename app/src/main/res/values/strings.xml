@@ -21,6 +21,8 @@
     <string name="description_daily_inspiration">Get inspired daily, weekly, or whenever you may need it!</string>
     <string name="description_share">Share inspirations with friends and family!</string>
 
+    <!-- Dialog -->
+    <string name="failure_description">Couldn\'t retrieve an inspirational image. Catalyst will try again for the next inspiration.</string>
     <string name="inspiration_loading">Generating inspirations is hard work. Please wait.</string>
     <string name="share_processing">Sharing inspirations is hard work. Please wait.</string>
 

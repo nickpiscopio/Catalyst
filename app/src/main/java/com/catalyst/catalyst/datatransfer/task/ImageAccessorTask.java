@@ -61,6 +61,6 @@ public class ImageAccessorTask extends AsyncTask<String, Void, CatalystBitmap>
     {
         super.onPostExecute(image);
 
-        imageAccessorListener.onImageRetrieved(image);
+        imageAccessorListener.onImageRetrievedSuccessfully(image);
     }
 }

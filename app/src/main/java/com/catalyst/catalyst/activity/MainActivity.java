@@ -28,12 +28,12 @@ import com.catalyst.catalyst.alarm.CatalystAlarm;
 import com.catalyst.catalyst.alarm.CatalystNotification;
 import com.catalyst.catalyst.datatransfer.ImageAccessor;
 import com.catalyst.catalyst.datatransfer.task.InspirationRetrievalTask;
+import com.catalyst.catalyst.datatransfer.task.ShareTask;
 import com.catalyst.catalyst.datatransfer.task.UpdateInspirationsTask;
 import com.catalyst.catalyst.entity.CatalystBitmap;
 import com.catalyst.catalyst.listener.ImageAccessorListener;
 import com.catalyst.catalyst.listener.ShareListener;
 import com.catalyst.catalyst.listener.TaskListener;
-import com.catalyst.catalyst.datatransfer.task.ShareTask;
 import com.catalyst.catalyst.util.Constant;
 
 import java.io.File;
@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
 {
     private final String INSPIRATION_ID = "com.catalyst.catalyst.inspiration.id";
     private final String INSPIRATION_AUTHOR = "com.catalyst.catalyst.inspiration.author";
-    private final String IMAGE_ACCESSOR_STATE = "com.catalyst.catalyst.image.accessor.state";
 
     private SharedPreferences prefs;
 
@@ -118,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         author = (TextView) findViewById(R.id.text_author);
         imageAuthor = (TextView) findViewById(R.id.text_image_author);
 
+        getImageAccessorState();
+
         setLoading(true);
 
         ActionBar actionBar = getSupportActionBar();
@@ -174,16 +175,19 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
 
         if (imageAccessorState != null)
         {
-            savedInstanceState.putInt(IMAGE_ACCESSOR_STATE, imageAccessorState.ordinal());
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(Constant.INSPIRATION_BACKGROUND_IMAGE_STATE, imageAccessorState.ordinal());
+            editor.apply();
         }
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    /**
+     * Loads the imageAccessorState from the shared preferences.
+     */
+    private void getImageAccessorState()
     {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        int imageState = savedInstanceState.getInt(IMAGE_ACCESSOR_STATE, Constant.PROCESS_FAILED);
+        int imageState = prefs.getInt(Constant.INSPIRATION_BACKGROUND_IMAGE_STATE,
+                                         Constant.PROCESS_FAILED);
 
         if (imageState > Constant.PROCESS_FAILED)
         {
@@ -193,7 +197,10 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
                     imageAccessorState = ImageAccessor.ImageAccessorState.PROCESSING;
                     break;
                 case 1:
-                    imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED;
+                    imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED_SUCCESSFULLY;
+                    break;
+                case 2:
+                    imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED_UNSUCCESSFULLY;
                     break;
                 default:
                     break;
@@ -238,7 +245,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
             {
                 editor.putString(INSPIRATION_ID, result[0]);
                 editor.putString(INSPIRATION_AUTHOR, result[1]);
-                editor.putBoolean(Constant.NEW_INSPIRATION, false);
                 editor.apply();
             }
         }
@@ -255,18 +261,31 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
     }
 
     @Override
-    public void onImageRetrieved(CatalystBitmap catalystBitmap)
+    public void onImageRetrievedSuccessfully(CatalystBitmap catalystBitmap)
     {
         String author = catalystBitmap.getAuthor();
 
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE, Base64.encodeToString(catalystBitmap.getEncodedBitmap(), Base64.DEFAULT));
         editor.putString(Constant.INSPIRATION_BACKGROUND_IMAGE_AUTHOR, author);
+        editor.putBoolean(Constant.NEW_INSPIRATION, false);
         editor.apply();
 
-        imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED;
+        imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED_SUCCESSFULLY;
 
         setBackgroundImage(catalystBitmap.getBitmap(), author);
+    }
+
+    @Override
+    public void onImageRetrievalFailure()
+    {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(Constant.NEW_INSPIRATION, false);
+        editor.apply();
+
+        imageAccessorState = ImageAccessor.ImageAccessorState.FINISHED_UNSUCCESSFULLY;
+
+        setImageFailureMessage();
     }
 
     @Override
@@ -289,11 +308,15 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         String encodedImage = prefs.getString(Constant.INSPIRATION_BACKGROUND_IMAGE, "");
         String imageAuthor = prefs.getString(Constant.INSPIRATION_BACKGROUND_IMAGE_AUTHOR, "");
 
-        if (imageAccessorState == ImageAccessor.ImageAccessorState.FINISHED || !encodedImage.equalsIgnoreCase(""))
+        if (imageAccessorState == ImageAccessor.ImageAccessorState.FINISHED_SUCCESSFULLY || !encodedImage.equalsIgnoreCase(""))
         {
             byte[] b = Base64.decode(encodedImage, Base64.DEFAULT);
             Bitmap image = BitmapFactory.decodeByteArray(b, 0, b.length);
             setBackgroundImage(image, imageAuthor);
+        }
+        else if (imageAccessorState == ImageAccessor.ImageAccessorState.FINISHED_UNSUCCESSFULLY)
+        {
+            setImageFailureMessage();
         }
         else
         {
@@ -318,9 +341,24 @@ public class MainActivity extends AppCompatActivity implements TaskListener, Ima
         setLoading(false);
     }
 
+    /**
+     * Displays a progress dialog to the user.
+     *
+     * @param message   The message to display.
+     */
     private void showProgressDialog(String message)
     {
         progressDialog = ProgressDialog.show(this, null, message, false);
+    }
+
+    /**
+     * Shows a message to the user that the image retrieval failed.
+     */
+    private void setImageFailureMessage()
+    {
+        imageAuthor.setText(getResources().getString(R.string.failure_description));
+
+        setLoading(false);
     }
 
     /**

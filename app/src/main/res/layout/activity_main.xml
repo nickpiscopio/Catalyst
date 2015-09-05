@@ -25,35 +25,43 @@
             android:padding="@dimen/margins"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/text_inspiration"
-                android:id="@+id/text_inspiration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:textSize="@dimen/title"/>
-
-            <TextView
-                style="@style/text_author"
-                android:id="@+id/text_author"
-                android:layout_below="@id/text_inspiration"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/about_description_margin"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:textSize="@dimen/text_normal"/>
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/text_inspiration"
+                    android:id="@+id/text_inspiration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/title"
+                    android:text="You're a success!"/>
+
+                <TextView
+                    style="@style/text_author"
+                    android:id="@+id/text_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/description_margin"
+                    android:layout_gravity="end"
+                    android:textSize="@dimen/text_normal"
+                    android:text="—Catalyst"/>
+
+            </LinearLayout>
 
             <TextView
                 style="@style/text_author"
                 android:id="@+id/text_image_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/about_description_margin"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
+                android:gravity="end"
                 android:textSize="@dimen/text_small"/>
 
         </RelativeLayout>

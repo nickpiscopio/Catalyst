@@ -44,9 +44,6 @@ public class JsonAccessor extends AsyncTask<String, Void, JSONObject>
             // Send POST data request
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
-//            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-//            wr.write( data );
-//            wr.flush();
 
             // Get the server response
             reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -81,8 +78,6 @@ public class JsonAccessor extends AsyncTask<String, Void, JSONObject>
         //Parse the String to JSONObject
         try
         {
-//            jsonObject = new JSONObject(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
-
             jsonObject = new JSONObject(text);
 
             success = true;

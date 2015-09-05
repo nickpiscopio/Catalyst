@@ -24,18 +24,23 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
     private final String API_ENDPOINT = "https://pixabay.com/api/?username=thyleft&key=82883695662c8ce96614&safesearch=true&editors_choice=true&response_group=high_resolution&image_type=photo&order=latest&per_page=200";
 
     private String author;
+    private int imageRetrievalFailures;
+    private final int IMAGE_RETRIEVAL_FAILURE_LIMIT = 2;
 
     private ImageAccessorListener imageAccessorListener;
 
     public enum ImageAccessorState
     {
         PROCESSING,
-        FINISHED
+        FINISHED_SUCCESSFULLY,
+        FINISHED_UNSUCCESSFULLY
     }
 
     public ImageAccessor(ImageAccessorListener imageAccessorListener)
     {
         this.imageAccessorListener = imageAccessorListener;
+
+        imageRetrievalFailures = 0;
 
         callApiEndpoint();
     }
@@ -66,16 +71,28 @@ public class ImageAccessor implements ServiceListener, ImageAccessorListener
     @Override
     public void onRetrievalFailed()
     {
-        callApiEndpoint();
+        imageRetrievalFailures++;
+
+        if (imageRetrievalFailures < IMAGE_RETRIEVAL_FAILURE_LIMIT)
+        {
+            callApiEndpoint();
+        }
+        else
+        {
+            imageAccessorListener.onImageRetrievalFailure();
+        }
     }
 
     @Override
-    public void onImageRetrieved(CatalystBitmap catalystBitmap)
+    public void onImageRetrievedSuccessfully(CatalystBitmap catalystBitmap)
     {
         catalystBitmap.setAuthor(author);
 
-        imageAccessorListener.onImageRetrieved(catalystBitmap);
+        imageAccessorListener.onImageRetrievedSuccessfully(catalystBitmap);
     }
+
+    @Override
+    public void onImageRetrievalFailure() { }
 
     /**
      * Calls the API endpoint to get new images.

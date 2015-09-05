@@ -9,5 +9,7 @@ import com.catalyst.catalyst.entity.CatalystBitmap;
  */
 public interface ImageAccessorListener
 {
-    void onImageRetrieved(CatalystBitmap catalystBitmap);
+    void onImageRetrievedSuccessfully(CatalystBitmap catalystBitmap);
+
+    void onImageRetrievalFailure();
 }

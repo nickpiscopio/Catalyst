@@ -2,7 +2,6 @@ package com.catalyst.catalyst.datatransfer.task;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
@@ -26,8 +25,6 @@ public class InspirationRetrievalTask extends AsyncTask<Void, Void, Void>
     private Context context;
 
     private TaskListener taskListener;
-
-    private SharedPreferences prefs;
 
     private String inspirationId = "";
     private String author = "";

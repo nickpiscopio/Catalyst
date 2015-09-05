@@ -16,9 +16,7 @@
 
     <dimen name="demo_image_margin">30dp</dimen>
     <dimen name="demo_text_margin">5dp</dimen>
-    <dimen name="about_description_margin">2dp</dimen>
-    <dimen name="pager_margin">5dp</dimen>
+    <dimen name="description_margin">3dp</dimen>
+    <dimen name="pager_margin">3dp</dimen>
     <dimen name="progress_bar_margin">12dp</dimen>
-
-    <dimen name="demo_image_height">150dp</dimen>
 </resources>
